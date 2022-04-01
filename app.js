@@ -12,6 +12,6 @@ app.use(cors());
 
 app.use("/", require("./routes"));
 
-app.listen(process.env.APP_PORT, () => {
-    console.log("Server is running on", process.env.APP_PORT);
+app.listen(process.env.PORT, () => {
+    console.log("Server is running on", process.env.PORT || 8080);
 });
