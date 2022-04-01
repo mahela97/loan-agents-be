@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet author="mahela" id="1">
+        <createTable tableName="user" schemaName="public">
+            <column name="firstName" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastName" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userId" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_id" unique="true"/>
+            </column>
+            <column name="createdAt" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            </column>
+            <column name="referredBy" type="VARCHAR(30)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="longitude" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="latitude" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="archived" type="BOOLEAN" defaultValueBoolean="false">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="2">
+        <createTable tableName="social_media" schemaName="public">
+            <column name="social_media_name" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="social_media_icon" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="social_media_id" type="VARCHAR(10)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_social_media" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="3">
+        <createTable tableName="user_social_media" schemaName="public">
+            <column name="social_media_id" type="VARCHAR(10)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_user_social_media"
+                />
+            </column>
+            <column name="value" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userId" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_user_social_media"
+                />
+            </column>
+            <column name="visibility" type="BOOLEAN" defaultValueBoolean="false">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="4">
+        <addForeignKeyConstraint baseColumnNames="userId"
+                                 baseTableName="user_social_media"
+                                 constraintName="fk_user_social_media_user"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+
+    <changeSet author="mahela" id="5">
+        <addForeignKeyConstraint baseColumnNames="social_media_id"
+                                 baseTableName="user_social_media"
+                                 constraintName="fk_user_social_media_social_media"
+                                 referencedColumnNames="social_media_id"
+                                 referencedTableName="social_media"
+        />
+    </changeSet>
+
+</databaseChangeLog>
