@@ -22,12 +22,12 @@ module.exports = {
         data.userId = user.uid;
         const contactDetails = [
             {
-                userId: null,
+                userId: user.uid,
                 value: phone,
                 social_media_id: SOCIAL_MEDIA_ID_PHONE,
             },
             {
-                userId: null,
+                userId: user.uid,
                 value: email,
                 social_media_id: SOCIAL_MEDIA_ID_EMAIL,
 
