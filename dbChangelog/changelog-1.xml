@@ -34,22 +34,22 @@
     </changeSet>
 
     <changeSet author="mahela" id="2">
-        <createTable tableName="social_media" schemaName="public">
-            <column name="social_media_name" type="VARCHAR(25)">
+        <createTable tableName="socialMedia" schemaName="public">
+            <column name="socialMediaName" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
-            <column name="social_media_icon" type="VARCHAR(50)">
+            <column name="socialMediaIcon" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="social_media_id" type="VARCHAR(10)">
+            <column name="socialMediaId" type="VARCHAR(10)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_social_media" unique="true"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet author="mahela" id="3">
-        <createTable tableName="user_social_media" schemaName="public">
-            <column name="social_media_id" type="VARCHAR(10)">
+        <createTable tableName="userSocialMedia" schemaName="public">
+            <column name="socialMediaId" type="VARCHAR(10)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_user_social_media"
                 />
             </column>
@@ -67,7 +67,7 @@
 
     <changeSet author="mahela" id="4">
         <addForeignKeyConstraint baseColumnNames="userId"
-                                 baseTableName="user_social_media"
+                                 baseTableName="userSocialMedia"
                                  constraintName="fk_user_social_media_user"
                                  referencedColumnNames="userId"
                                  referencedTableName="user"
@@ -75,11 +75,11 @@
     </changeSet>
 
     <changeSet author="mahela" id="5">
-        <addForeignKeyConstraint baseColumnNames="social_media_id"
-                                 baseTableName="user_social_media"
+        <addForeignKeyConstraint baseColumnNames="socialMediaId"
+                                 baseTableName="userSocialMedia"
                                  constraintName="fk_user_social_media_social_media"
-                                 referencedColumnNames="social_media_id"
-                                 referencedTableName="social_media"
+                                 referencedColumnNames="socialMediaId"
+                                 referencedTableName="socialMedia"
         />
     </changeSet>
 
