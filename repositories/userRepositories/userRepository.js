@@ -11,5 +11,8 @@ module.exports = {
         await knex(USER_SOCIAL_MEDIA_TABLE).transacting(transaction).insert(contactDetails);
         transaction.commit();
 
-    },
+    },getDbUserById:async(userId)=>{
+        const user = knex(USER_TABLE).select("*").where("userId =?",[userId]);
+        console.log(user);
+    }
 };
