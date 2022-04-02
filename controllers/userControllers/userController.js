@@ -12,7 +12,7 @@ module.exports = {
             lastName: Joi.string().required(),
             referredBy: Joi.string().allow(""),
             role: Joi.string().required(),
-            password:Joi.string().required(),
+            password:Joi.string().required().min(6),
             location:Joi.string().required(),
             longitude: Joi.string().required(),
             latitude: Joi.string().required(),
@@ -29,7 +29,9 @@ module.exports = {
             const result = await registerUser(body);
             res.status(201).send({success: 1, data: {userId: result}});
         } catch (error) {
-            if (error.message) res.status(400).send(error.message);
+            if (error.message==="TOO_SHORT") res.status(400).send({message:[{message:"Invalid phone number",path:["phone"]}]})
+            else if (error.errorInfo.code==="auth/email-already-exists") res.status(400).send({message:[{message:"User already exist.",path:["email"]}]})
+            else if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
 
         }
