@@ -33,7 +33,6 @@ module.exports = {
             else if (error.errorInfo.code==="auth/email-already-exists") res.status(400).send({message:[{message:"User already exist.",path:["email"]}]})
             else if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
-
         }
     },
 };
