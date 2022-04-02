@@ -17,9 +17,9 @@ module.exports = {
             email: Joi.string().email().required(),
             phone: Joi.string(),
         });
-        const validate = schema.validate(req.body);
+        const validate = schema.validate(req.body,{abortEarly:false});
         if (validate.error) {
-            res.status(401).send({message: validate.error.message});
+            res.status(400).send({message: validate.error.details});
             return;
         }
         const body = validate.value;
