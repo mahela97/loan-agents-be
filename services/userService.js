@@ -12,11 +12,12 @@ module.exports = {
         console.log("here")
     },
     registerUser: async (data) => {
-        const {email, phone} = data;
+        const {email, phone,password} = data;
         const user = await admin.auth().createUser({
             email,
             phoneNumber: phone,
             emailVerified: false,
+            password
         });
         data.userId = user.uid;
         const contactDetails = [
@@ -38,6 +39,7 @@ module.exports = {
         }
         delete data.phone;
         delete data.email;
+        delete data.password;
         await createDbUser(data, contactDetails);
         return user.uid;
     }, getUserByUid: async (uid) => {

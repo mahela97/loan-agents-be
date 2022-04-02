@@ -10,8 +10,10 @@ module.exports = {
         const schema = Joi.object({
             firstName: Joi.string().required(),
             lastName: Joi.string().required(),
-            referredBy: Joi.string(),
+            referredBy: Joi.string().allow(""),
             role: Joi.string().required(),
+            password:Joi.string().required(),
+            location:Joi.string().required(),
             longitude: Joi.string().required(),
             latitude: Joi.string().required(),
             email: Joi.string().email().required(),
