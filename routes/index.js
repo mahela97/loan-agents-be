@@ -1,8 +1,8 @@
 const express = require('express');
-const validateFirebaseIdToken = require("../middlewares/validateFirebaseIdToken");
 const router = express.Router();
 
-router.use('/user', require('./user'));
-router.use("/socialMedia",require("./socialMedia"))
+router.use("/public",require("./publicRoutes"))
+router.use('/user', require('./userRoutes'));
+router.use("/socialMedia",require("./socialMediaRoutes"))
 
 module.exports = router;
