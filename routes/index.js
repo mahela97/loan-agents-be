@@ -1,7 +1,7 @@
 const express = require('express');
-const validateFirebaseIdToken = require("../middlewares/validateFirebaseIdToken");
 const router = express.Router();
 
+router.use("/public",require("./publicRoutes"))
 router.use('/user', require('./user'));
 router.use("/socialMedia",require("./socialMedia"))
 
