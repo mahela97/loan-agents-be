@@ -15,7 +15,7 @@ module.exports = {
             longitude: Joi.string().required(),
             latitude: Joi.string().required(),
             email: Joi.string().email().required(),
-            phone: Joi.string().required(),
+            phone: Joi.string(),
         });
         const validate = schema.validate(req.body);
         if (validate.error) {

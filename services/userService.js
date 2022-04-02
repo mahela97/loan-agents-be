@@ -20,18 +20,22 @@ module.exports = {
         });
         data.userId = user.uid;
         const contactDetails = [
-            {
-                userId: user.uid,
-                value: phone,
-                social_media_id: SOCIAL_MEDIA_ID_PHONE,
-            },
+
             {
                 userId: user.uid,
                 value: email,
-                social_media_id: SOCIAL_MEDIA_ID_EMAIL,
+                socialMediaId: SOCIAL_MEDIA_ID_EMAIL,
 
-            },
+            }
         ];
+        if (phone) {
+            contactDetails.push(            {
+                userId: user.uid,
+                value: phone,
+                socialMediaId: SOCIAL_MEDIA_ID_PHONE,
+            },)
+
+        }
         delete data.phone;
         delete data.email;
         await createDbUser(data, contactDetails);
