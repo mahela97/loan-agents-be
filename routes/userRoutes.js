@@ -7,7 +7,6 @@ const {validateFirebaseIdToken} = require("../middlewares/validateFirebaseIdToke
 const router = require("express").Router();
 
 //public Routes
-router.get("/", test);
 router.post("/register", registerUser);
 
 //private routes
