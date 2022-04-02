@@ -15,13 +15,11 @@ module.exports = {
         const {email, phone,password} = data;
         const user = await admin.auth().createUser({
             email,
-            phoneNumber: phone,
             emailVerified: false,
             password
         });
         data.userId = user.uid;
         const contactDetails = [
-
             {
                 userId: user.uid,
                 value: email,
