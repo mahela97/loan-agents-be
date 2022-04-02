@@ -6,18 +6,21 @@
     <changeSet author="mahela" id="6">
         <createTable tableName="siteMetaData" schemaName="public">
             <column name="mainTitle" type="VARCHAR(255)">
-                <constraints nullable="true"
+                <constraints nullable="false"
                 />
             </column>
             <column name="subTitle" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="logo" type="VARCHAR(255)">
-                <constraints nullable="true"
+                <constraints nullable="false"
                 />
             </column>
             <column name="logoWithName" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
+            </column>
+            <column name="cover" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
