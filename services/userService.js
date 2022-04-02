@@ -1,16 +1,15 @@
 const {
     testCase,
-    createDbUser,
+    createDbUser, getDbUserById,
 } = require("../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
-const moment = require("moment");
 const {
     SOCIAL_MEDIA_ID_PHONE,
     SOCIAL_MEDIA_ID_EMAIL,
 } = require("../constants/const");
 module.exports = {
     testService: () => {
-        testCase();
+        console.log("here")
     },
     registerUser: async (data) => {
         const {email, phone} = data;
@@ -37,5 +36,8 @@ module.exports = {
         delete data.email;
         await createDbUser(data, contactDetails);
         return user.uid;
-    },
+    }, getUserByUid: async (uid) => {
+        return getDbUserById(uid);
+
+    }
 };
