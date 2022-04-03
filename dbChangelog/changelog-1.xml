@@ -52,7 +52,7 @@
 
     <changeSet author="mahela" id="3">
         <createTable tableName="userContactMethod" schemaName="public">
-            <column name="userContactMethodId" type="VARCHAR(10)">
+            <column name="contactMethodId" type="VARCHAR(10)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_contact_method"
                 />
             </column>
@@ -78,7 +78,7 @@
     </changeSet>
 
     <changeSet author="mahela" id="5">
-        <addForeignKeyConstraint baseColumnNames="userContactMethodId"
+        <addForeignKeyConstraint baseColumnNames="contactMethodId"
                                  baseTableName="userContactMethod"
                                  constraintName="fk_user_social_media_social_media"
                                  referencedColumnNames="contactMethodId"
