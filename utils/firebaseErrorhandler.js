@@ -1,3 +1,4 @@
+const getErrorObject = require("./commonErrorhandler");
 const handleFirebase =(error)=>{
     switch (error.errorInfo.code){
         case "auth/email-already-exists":
@@ -57,10 +58,6 @@ const handleFirebase =(error)=>{
         case "auth/user-not-found":
             return getErrorObject("Error occurred","error")
     }
-}
-
-const getErrorObject = (message,fieldName)=>{
-    return {message:[{message:message,path:[fieldName]}]}
 }
 
 module.exports = handleFirebase;

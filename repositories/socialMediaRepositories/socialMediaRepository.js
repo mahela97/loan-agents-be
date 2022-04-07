@@ -1,10 +1,9 @@
 const knex = require("../../db/db-config");
-const {SOCIAL_MEDIA_TABLE} = require("../../constants/const");
+const { CONTACT_METHOD_TABLE, SELECT_ALL} = require("../../constants/const");
 
 module.exports = {
     getDbAllSocialMedia:async()=>{
-        const result =await knex(SOCIAL_MEDIA_TABLE).select("*");
-        console.log(result);
+        const result =await knex(CONTACT_METHOD_TABLE).select(SELECT_ALL);
         return result;
     }
 }

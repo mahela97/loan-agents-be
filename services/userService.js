@@ -5,7 +5,7 @@ const {
 const admin = require("firebase-admin");
 const {
     SOCIAL_MEDIA_ID_PHONE,
-    SOCIAL_MEDIA_ID_EMAIL,
+    SOCIAL_MEDIA_ID_EMAIL, CONTACT_METHOD_EMAIL, CONTACT_METHOD_PHONE,
 } = require("../constants/const");
 module.exports = {
     testService: () => {
@@ -23,7 +23,7 @@ module.exports = {
             {
                 userId: user.uid,
                 value: email,
-                socialMediaId: SOCIAL_MEDIA_ID_EMAIL,
+                contactMethodId: CONTACT_METHOD_EMAIL,
 
             }
         ];
@@ -31,7 +31,7 @@ module.exports = {
             contactDetails.push(            {
                 userId: user.uid,
                 value: phone,
-                socialMediaId: SOCIAL_MEDIA_ID_PHONE,
+                contactMethodId: CONTACT_METHOD_PHONE,
             },)
 
         }

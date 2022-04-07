@@ -4,5 +4,6 @@ const {isAgent} = require("../middlewares/isAgent");
 
 router.use(isAgent);
 router.get("/", (req, res) => res.status(200).send("Success"))
+// router.get("/details",getAgentDetails)
 
 module.exports = router;

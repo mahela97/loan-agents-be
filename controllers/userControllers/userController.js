@@ -30,9 +30,9 @@ module.exports = {
             const result = await registerUser(body);
             res.status(201).send({success: 1, data: {userId: result}});
         } catch (error) {
-            if (error.errorInfo.code) {
+            if (error.errorInfo) {
                 const message = handleFirebase(error);
-                res.status(400).send({message: [{message}]});
+                res.status(400).send(message);
             } else if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }

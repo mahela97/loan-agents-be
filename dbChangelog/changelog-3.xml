@@ -4,34 +4,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
     <changeSet author="mahela" id="1">
-        <createTable tableName="user" schemaName="public">
+        <createTable tableName="agentDetails" schemaName="public">
             <column name="firstName" type="VARCHAR(25)">
                 <constraints nullable="false"/>
             </column>
-            <column name="lastName" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="role" type="VARCHAR(10)">
-                <constraints nullable="false"/>
-            </column>
             <column name="userId" type="VARCHAR(30)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_id" unique="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_agentDetails" unique="true"/>
             </column>
-            <column name="createdAt" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-            </column>
-            <column name="referredBy" type="VARCHAR(30)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="longitude" type="VARCHAR(20)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="location" type="VARCHAR(20)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="latitude" type="VARCHAR(20)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="archived" type="BOOLEAN" defaultValueBoolean="false">
+            <column name="introduction" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
             </column>
         </createTable>
     </changeSet>
