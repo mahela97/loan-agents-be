@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet author="mahela" id="9">
+        <createTable tableName="language" schemaName="public">
+            <column name="languageName" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="languageId" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_languages" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="10">
+        <createTable tableName="agentLanguage" schemaName="public">
+            <column name="userId" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_agentLanguage" />
+            </column>
+            <column name="languageId" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_agentLanguage" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="11">
+        <addForeignKeyConstraint baseColumnNames="userId"
+                                 baseTableName="agentLanguage"
+                                 constraintName="fk_user_agentLanguage"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+
+    <changeSet author="mahela" id="12">
+        <addForeignKeyConstraint baseColumnNames="languageId"
+                                 baseTableName="agentLanguage"
+                                 constraintName="fk_language_agentLanguage"
+                                 referencedColumnNames="languageId"
+                                 referencedTableName="language"
+        />
+    </changeSet>
+
+</databaseChangeLog>

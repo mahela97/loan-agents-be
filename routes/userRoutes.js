@@ -10,9 +10,9 @@ const router = require("express").Router();
 router.post("/register", registerUser);
 
 //private routes
-router.use(validateFirebaseIdToken);
+//router.use(validateFirebaseIdToken);
 
-router.use("/agents",require("./agentRoutes"))
+router.use("/agent",require("./agentRoutes"))
 
 
 

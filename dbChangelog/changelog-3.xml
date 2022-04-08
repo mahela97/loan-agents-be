@@ -3,86 +3,41 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
-    <changeSet author="mahela" id="1">
-        <createTable tableName="user" schemaName="public">
-            <column name="firstName" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="lastName" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="role" type="VARCHAR(10)">
-                <constraints nullable="false"/>
+    <changeSet author="mahela" id="7">
+        <createTable tableName="agentDetail" schemaName="public">
+            <column name="introduction" type="TEXT">
+                <constraints nullable="true"/>
             </column>
             <column name="userId" type="VARCHAR(30)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_id" unique="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_agentDetails" unique="true"/>
             </column>
-            <column name="createdAt" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="statement" type="VARCHAR(255)" >
+                <constraints nullable="true" />
             </column>
-            <column name="referredBy" type="VARCHAR(30)">
-                <constraints nullable="true"/>
+            <column name="viaPhone" type="BOOLEAN" defaultValueBoolean="false" >
+                <constraints nullable="false" />
             </column>
-            <column name="longitude" type="VARCHAR(20)">
-                <constraints nullable="true"/>
+            <column name="viaMobile" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" />
             </column>
-            <column name="location" type="VARCHAR(20)">
-                <constraints nullable="true"/>
+            <column name="mobileServices" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" />
             </column>
-            <column name="latitude" type="VARCHAR(20)">
-                <constraints nullable="true"/>
+            <column name="profileCompleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false" />
             </column>
-            <column name="archived" type="BOOLEAN" defaultValueBoolean="false">
-            </column>
+<!--            <column name="subscriptionId" type="VARCHAR(255)" >-->
+<!--                <constraints nullable="true" default="false"/>-->
+<!--            </column>-->
         </createTable>
     </changeSet>
 
-    <changeSet author="mahela" id="2">
-        <createTable tableName="contactMethod" schemaName="public">
-            <column name="type" type="VARCHAR(25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="contactMethodIcon" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="contactMethodId" type="VARCHAR(10)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_contact_method" unique="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet author="mahela" id="3">
-        <createTable tableName="userContactMethod" schemaName="public">
-            <column name="userContactMethodId" type="VARCHAR(10)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_contact_method"
-                />
-            </column>
-            <column name="value" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="userId" type="VARCHAR(30)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_contact_method"
-                />
-            </column>
-            <column name="visibility" type="BOOLEAN" defaultValueBoolean="false">
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet author="mahela" id="4">
+    <changeSet author="mahela" id="8">
         <addForeignKeyConstraint baseColumnNames="userId"
-                                 baseTableName="userContactMethod"
-                                 constraintName="fk_user_social_media_user"
+                                 baseTableName="agentDetail"
+                                 constraintName="fk_user_agentDetails"
                                  referencedColumnNames="userId"
                                  referencedTableName="user"
-        />
-    </changeSet>
-
-    <changeSet author="mahela" id="5">
-        <addForeignKeyConstraint baseColumnNames="userContactMethodId"
-                                 baseTableName="userContactMethod"
-                                 constraintName="fk_user_social_media_social_media"
-                                 referencedColumnNames="contactMethodId"
-                                 referencedTableName="contactMethod"
         />
     </changeSet>
 
