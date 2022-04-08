@@ -1,6 +1,7 @@
 const Joi = require("joi");
+const {getAgentDetails} = require("../../services/agentService");
 module.exports = {
-    getAgentDetails:async (req,res)=>{
+    getAgent:async (req,res)=>{
         const schema = Joi.object({
             uid:Joi.string().required()
         })
@@ -12,10 +13,16 @@ module.exports = {
         }
         const {uid} = validate.value
         try{
-            // const userDetails = await getUserDetails
+            const agentDetails = await getAgentDetails(uid);
+            if (!agentDetails) {
+                res.status(404).send("User not found");
+                return;
+            }
+            res.status(201).send(agentDetails)
 
         }catch(error){
-
+            console.log(error)
+            res.status(401).send(error)
         }
     }
 }
