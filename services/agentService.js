@@ -21,10 +21,10 @@ module.exports = {
         const agentDetails = await getAgentDetailsByUid(uid);
 
 
+
         if (agentDetails[0]) {
             updatedUser = {...agentDetails[0]};
         }
-
         const socialMedia = {};
         (await getSocialMediaByUid(uid)).forEach(socialM => {
             const key = socialM.contactMethodId.toLowerCase();
@@ -38,7 +38,7 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, location, languages, socialMedia, contactDetails, ...updatedUser
+            firstName, lastName, location, languages, socialMedia, contactDetails, ...updatedUser, uid
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
@@ -48,8 +48,5 @@ module.exports = {
         await updateUserDetailsById(uid,{firstName,lastName,location},transaction);
         await updateAgentDetails(uid,{statement},transaction);
         await transaction.commit();
-
-
-
     }
 }

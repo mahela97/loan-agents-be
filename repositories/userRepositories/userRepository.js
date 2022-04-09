@@ -25,5 +25,9 @@ module.exports = {
 
     updateUserDetailsById:async (userId,details,transaction)=>{
         await knex(USER_TABLE.NAME).transacting(transaction).update(details).where(USER_TABLE.USER_ID,userId);
+    },
+
+    addUserContactMethodsToDB:async (uid, contactDetails)=>{
+        await knex(USER_CONTACT_METHOD_TABLE.NAME).insert(contactDetails).onConflict(contactDetails).merge();
     }
 };

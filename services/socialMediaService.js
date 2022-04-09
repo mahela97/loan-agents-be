@@ -2,5 +2,5 @@ const {getDbAllSocialMedia} = require("../repositories/socialMediaRepositories/s
 module.exports = {
     getAllSocialMedias:async () => {
     return getDbAllSocialMedia();
-    }
+    },
 }
