@@ -24,6 +24,7 @@ module.exports = {
 
         if (agentDetails[0]) {
             updatedUser = {...agentDetails[0]};
+            delete updatedUser.userId;
         }
         const socialMedia = {};
         (await getSocialMediaByUid(uid)).forEach(socialM => {
@@ -38,7 +39,7 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, location, languages, socialMedia, contactDetails, ...updatedUser, uid
+            firstName, lastName, location, languages, socialMedia, contactDetails, ...updatedUser,uid
         }
 
     }, editAgentBasicDetails: async (uid, details) => {

@@ -42,6 +42,11 @@ module.exports = {
             SOCIAL: "S",
             CONTACT_METHOD_PHONE: "PHONE",
             CONTACT_METHOD_EMAIL: "EMAIL",
+            SOCIAL_MEDIA_FACEBOOK: "FACEBOOK",
+            SOCIAL_MEDIA_LINKEDIN: "LINKEDIN",
+            SOCIAL_MEDIA_TWITTER: "TWITTER",
+            SOCIAL_MEDIA_DRIBBLE: "DRIBBLE",
+            SOCIAL_MEDIA_TWITCH: "TWITCH",
         }
     },
     SITE_META_DATA_TABLE: {
