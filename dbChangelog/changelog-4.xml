@@ -22,9 +22,6 @@
             <column name="languageId" type="VARCHAR(30)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_agentLanguage" />
             </column>
-            <column name="archived" type="BOOLEAN">
-                <constraints nullable="false" defaultValueBoolean="false"/>
-            </column>
         </createTable>
     </changeSet>
 

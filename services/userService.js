@@ -1,16 +1,16 @@
 const {
-    createDbUser, getDbUserById,
+    createDbUser, getDbUserById, addUserContactMethodsToDB,
 } = require("../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
 const {
-      CONTACT_METHOD_TABLE,
+    CONTACT_METHOD_TABLE,
 } = require("../constants/const");
 module.exports = {
     testService: () => {
         console.log("here")
     },
     registerUser: async (data) => {
-        const {email, phone,password} = data;
+        const {email, phone, password} = data;
         const user = await admin.auth().createUser({
             email,
             emailVerified: false,
@@ -26,7 +26,7 @@ module.exports = {
             }
         ];
         if (phone) {
-            contactDetails.push(            {
+            contactDetails.push({
                 userId: user.uid,
                 value: phone,
                 contactMethodId: CONTACT_METHOD_TABLE.values.CONTACT_METHOD_PHONE,
@@ -43,5 +43,20 @@ module.exports = {
     getUserByUid: async (uid) => {
         return getDbUserById(uid);
 
+    },
+
+
+    addSocialMediaToUser: async (uid, details) => {
+        const socialMedias = [];
+        Object.keys(details).forEach(socialMedia => {
+            socialMedias.push({
+                contactMethodId: socialMedia.toUpperCase()
+                , userId: uid, value: details.socialMedia
+            })
+        })
+
+
+        await addUserContactMethodsToDB(uid, socialMedias)
     }
 };
+
