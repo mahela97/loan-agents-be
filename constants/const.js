@@ -5,6 +5,9 @@ module.exports = {
         FIRST_NAME: "firstName",
         LAST_NAME: "lastName",
         LOCATION: "location",
+        values:{
+            AGENT:"agent"
+        }
     },
     COMMON: {ARCHIVED: "archived",
         SELECT_ALL: "*"

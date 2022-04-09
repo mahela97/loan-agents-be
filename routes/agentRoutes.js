@@ -5,7 +5,7 @@ const {getAgent, editAgentDetails} = require("../controllers/userControllers/age
 
 // router.use(isAgent);
 router.get("/", getAgent)
-router.patch("/:uid",editAgentDetails);
+router.patch("/:uid/basicDetails",editAgentDetails);
 // router.get("/details",getAgentDetails)
 
 module.exports = router;
