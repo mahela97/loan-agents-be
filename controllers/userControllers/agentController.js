@@ -21,6 +21,7 @@ module.exports = {
             res.status(201).send(agentDetails)
 
         }catch(error){
+            console.log(error)
             res.status(401).send(error)
         }
     },

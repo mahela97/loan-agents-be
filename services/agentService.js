@@ -9,7 +9,6 @@ module.exports = {
             return null; // if agent is archived, wont proceed
         }
         const {firstName, lastName, location} = userDetails[0];
-
         const agentLanguages = await getLanguagesByUid(uid);
         const languages = agentLanguages.map(({languageName})=>languageName);
 
@@ -18,13 +17,16 @@ module.exports = {
         viaPhone, viaMobile, mobileServices} = agentDetails[0];
 
 
-        const socialMedia = (await getSocialMediaByUid(uid)).map(socialM=>{
-            const key = socialM.contactMethodId.toLowerCase();
-            return {[key]:socialM.value}
+        const socialMedia = {};
+        (await getSocialMediaByUid(uid)).forEach(socialM=>{
+             const key = socialM.contactMethodId.toLowerCase();
+            socialMedia[key] = socialM.value
+
         });
-        const contactDetails = (await getContactDetailsByUid(uid)).map(contactM=>{
+        const contactDetails = {};
+        (await getContactDetailsByUid(uid)).forEach(contactM=>{
             const key = contactM.contactMethodId.toLowerCase();
-            return {[key]:contactM.value}
+            contactDetails[key] = contactM.value
         });
         return {
             firstName, lastName, location, statement, languages, socialMedia, contactDetails, introduction,
