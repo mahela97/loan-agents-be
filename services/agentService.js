@@ -15,12 +15,8 @@ module.exports = {
         let updatedUser = {};
 
         const {firstName, lastName, location} = userDetails[0];
-        const agentLanguages = await getLanguagesByUid(uid);
-        const languages = agentLanguages.map(({languageName}) => languageName);
-
+        const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
-
-
 
         if (agentDetails[0]) {
             updatedUser = {...agentDetails[0]};

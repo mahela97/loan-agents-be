@@ -37,4 +37,25 @@ module.exports = {
             else if (error) res.status(400).send(error);
         }
     },
+
+    addUserLanguage:async (req,res)=>{
+        const schema = Joi.array().required();
+        const validate = schema.validate(req.body);
+        if (validate.error) {
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+        const body = validate.value;
+        try {
+            const result = await registerUser(body);
+            res.status(201).send({success: 1, data: {userId: result}});
+        } catch (error) {
+            if (error.errorInfo) {
+                const message = handleFirebase(error);
+                res.status(400).send(message);
+            } else if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
+        }
+
+    }
 };
