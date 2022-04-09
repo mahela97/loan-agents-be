@@ -8,5 +8,9 @@ module.exports = {
         where(AGENT_LANGUAGE_TABLE.USER_ID,uid)
 
         return userLanguages;
+    },
+
+    getAllLanguages:async ()=>{
+        return knex(LANGUAGE_TABLE.NAME).select(COMMON.SELECT_ALL)
     }
 }
