@@ -1,7 +1,7 @@
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 module.exports = {
-    getCode: async (phonenumer, channel) => {
+    getCode: async (phonenumber, channel) => {
         await client
             .verify
             .services(process.env.VERIFY_SERVICE_SID)

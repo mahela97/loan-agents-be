@@ -38,7 +38,9 @@ module.exports = {
         delete data.password;
         await createDbUser(data, contactDetails);
         return user.uid;
-    }, getUserByUid: async (uid) => {
+    },
+
+    getUserByUid: async (uid) => {
         return getDbUserById(uid);
 
     }
