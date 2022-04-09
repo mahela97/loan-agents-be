@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const {getAgentDetails, editAgentBasicDetails} = require("../../services/agentService");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
-const {addSocialMediaToUser} = require("../../services/userService");
+const { addContactDetailToUser} = require("../../services/userService");
 module.exports = {
     getAgent: async (req, res) => {
         const schema = Joi.object({
@@ -82,7 +82,7 @@ module.exports = {
         const {uid} = pathValidate.value;
 
         try {
-            await addSocialMediaToUser(uid, body)
+            await addContactDetailToUser(uid, body)
             res.status(201).send({success:1})
         } catch (error) {
             if (error.message) res.status(400).send(error.message);
@@ -111,7 +111,7 @@ module.exports = {
         const {uid} = pathValidate.value;
 
         try {
-            await addSocialMediaToUser(uid, body)
+            await addContactDetailToUser(uid, body)
             res.status(200).send({success:1})
         } catch (error) {
             if (error.message) res.status(400).send(error.message);

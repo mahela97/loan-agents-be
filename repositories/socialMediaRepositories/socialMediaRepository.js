@@ -3,8 +3,7 @@ const { CONTACT_METHOD_TABLE, SELECT_ALL, USER_CONTACT_METHOD_TABLE} = require("
 
 module.exports = {
     getDbAllSocialMedia:async()=>{
-        const result =await knex(CONTACT_METHOD_TABLE.NAME).select(SELECT_ALL);
-        return result;
+        return knex(CONTACT_METHOD_TABLE.NAME).select(SELECT_ALL);
     },
 
     getSocialMediaByUid:async(uid)=>{

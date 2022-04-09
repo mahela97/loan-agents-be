@@ -5,6 +5,8 @@ const admin = require("firebase-admin");
 const {
     CONTACT_METHOD_TABLE,
 } = require("../constants/const");
+const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../repositories/publicRepository/languageRepository");
+const knex = require("../db/db-config");
 module.exports = {
     testService: () => {
         console.log("here")
@@ -45,19 +47,6 @@ module.exports = {
 
     },
 
-
-    addSocialMediaToUser: async (uid, details) => {
-        const socialMedias = [];
-        Object.keys(details).forEach(socialMedia => {
-            socialMedias.push({
-                contactMethodId: socialMedia.toUpperCase()
-                , userId: uid, value: details[socialMedia]
-            })
-        })
-
-        await addUserContactMethodsToDB(uid, socialMedias)
-    },
-
     addContactDetailToUser: async (uid, details) => {
         const contactDetails = [];
         Object.keys(details).forEach(contactDetail => {
@@ -68,6 +57,15 @@ module.exports = {
         })
 
         await addUserContactMethodsToDB(uid, contactDetails)
+    },
+
+    addLanguagesToUser:async (uid,languages) =>{
+        const dbLanguages = languages.map(language=>{
+            return {userId:uid,languageId:language}});
+        const transaction = await knex.transaction();
+        await deleteLanguagesByUid(uid, transaction);
+        await addLanguagesToDBUser(dbLanguages, transaction)
+        await transaction.commit();
     }
 
 

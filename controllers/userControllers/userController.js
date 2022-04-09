@@ -1,4 +1,4 @@
-const {testService, registerUser} = require("../../services/userService");
+const {testService, registerUser, addLanguagesToUser} = require("../../services/userService");
 const Joi = require("joi");
 const {string} = require("joi");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
@@ -45,15 +45,24 @@ module.exports = {
             res.status(400).send({message: validate.error.details});
             return;
         }
+
+        const pathSchema = Joi.object({
+            uid: Joi.string().required()
+        });
+        const pathValidate = pathSchema.validate(req.params, {abortEarly: false})
+        if (pathValidate.error) {
+            res.status(400).send({message: pathValidate.error.details})
+            return;
+        }
+
         const body = validate.value;
+        const {uid} = pathValidate.value;
         try {
-            const result = await registerUser(body);
-            res.status(201).send({success: 1, data: {userId: result}});
+            await addLanguagesToUser(uid,body);
+            res.status(201).send({success: 1});
         } catch (error) {
-            if (error.errorInfo) {
-                const message = handleFirebase(error);
-                res.status(400).send(message);
-            } else if (error.message) res.status(400).send(error.message);
+            console.log(error)
+            if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }
 

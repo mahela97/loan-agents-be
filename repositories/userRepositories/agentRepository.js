@@ -9,8 +9,9 @@ module.exports = {
     updateAgentDetails: async (uid, details, transaction) => {
         if (transaction) {
             await knex(AGENT_DETAIL_TABLE.NAME).transacting(transaction).update(details).where(AGENT_DETAIL_TABLE.USER_ID, uid)
-        } else {
-            await knex(AGENT_DETAIL_TABLE.NAME).update(details).where(AGENT_DETAIL_TABLE.USER_ID, uid)
+            return;
         }
+        await knex(AGENT_DETAIL_TABLE.NAME).update(details).where(AGENT_DETAIL_TABLE.USER_ID, uid)
+
     }
 }

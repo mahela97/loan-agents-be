@@ -1,7 +1,7 @@
 const knex = require("../../db/db-config");
 const {
     USER_TABLE,
-    USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE, CONTACT_METHOD_TABLE,
+    USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE, CONTACT_METHOD_TABLE, AGENT_LANGUAGE_TABLE,
 } = require("../../constants/const");
 
 
@@ -19,8 +19,7 @@ module.exports = {
     },
 
     getDbUserById:async(userId)=>{
-        const user =await knex(USER_TABLE.NAME).select(COMMON.SELECT_ALL).where(USER_TABLE.USER_ID,userId).where(COMMON.ARCHIVED,false);
-        return user;
+        return knex(USER_TABLE.NAME).select(COMMON.SELECT_ALL).where(USER_TABLE.USER_ID, userId).where(COMMON.ARCHIVED, false);
     },
 
     updateUserDetailsById:async (userId,details,transaction)=>{
@@ -30,5 +29,7 @@ module.exports = {
     addUserContactMethodsToDB:async (uid, contactDetails)=>{
         await knex(USER_CONTACT_METHOD_TABLE.NAME).insert(contactDetails).onConflict([
             USER_CONTACT_METHOD_TABLE.USER_ID,USER_CONTACT_METHOD_TABLE.CONTACT_METHOD_ID]).merge();
-    }
+    },
+
+
 };
