@@ -1,3 +1,4 @@
+const {getAllLanguages} = require("../repositories/publicRepository/languageRepository");
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 module.exports = {
@@ -21,6 +22,10 @@ module.exports = {
                 to: `+${phonenumber}`,
                 code: code
             })
+    },
+
+    getLanguages:async ()=>{
+        return getAllLanguages();
     }
 
 }
