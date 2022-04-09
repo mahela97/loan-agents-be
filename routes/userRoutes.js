@@ -1,6 +1,6 @@
 const {
     test,
-    registerUser,
+    registerUser, addUserLanguage,
 } = require("../controllers/userControllers/userController");
 const {validateFirebaseIdToken} = require("../middlewares/validateFirebaseIdToken");
 
@@ -12,6 +12,7 @@ router.post("/register", registerUser);
 //private routes
 //router.use(validateFirebaseIdToken);
 
+router.post("/:uid/languages", addUserLanguage);
 router.use("/agent",require("./agentRoutes"))
 
 
