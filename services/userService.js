@@ -56,6 +56,20 @@ module.exports = {
         })
 
         await addUserContactMethodsToDB(uid, socialMedias)
+    },
+
+    addContactDetailToUser: async (uid, details) => {
+        const contactDetails = [];
+        Object.keys(details).forEach(contactDetail => {
+            contactDetails.push({
+                contactMethodId: contactDetail.toUpperCase()
+                , userId: uid, value: details[contactDetail]
+            })
+        })
+
+        await addUserContactMethodsToDB(uid, contactDetails)
     }
+
+
 };
 
