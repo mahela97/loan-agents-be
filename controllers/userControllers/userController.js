@@ -39,7 +39,7 @@ module.exports = {
     },
 
     addUserLanguage:async (req,res)=>{
-        const schema = Joi.array().required();
+        const schema = Joi.array().items(Joi.string()).allow("");
         const validate = schema.validate(req.body);
         if (validate.error) {
             res.status(400).send({message: validate.error.details});
