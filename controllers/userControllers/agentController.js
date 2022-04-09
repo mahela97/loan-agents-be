@@ -83,9 +83,8 @@ module.exports = {
 
         try {
             await addSocialMediaToUser(uid, body)
-
+            res.status(200).send({success:1})
         } catch (error) {
-            console.log(error)
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }

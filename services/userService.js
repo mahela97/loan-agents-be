@@ -51,10 +51,9 @@ module.exports = {
         Object.keys(details).forEach(socialMedia => {
             socialMedias.push({
                 contactMethodId: socialMedia.toUpperCase()
-                , userId: uid, value: details.socialMedia
+                , userId: uid, value: details[socialMedia]
             })
         })
-
 
         await addUserContactMethodsToDB(uid, socialMedias)
     }

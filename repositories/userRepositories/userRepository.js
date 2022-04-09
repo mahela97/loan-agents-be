@@ -1,7 +1,7 @@
 const knex = require("../../db/db-config");
 const {
     USER_TABLE,
-    USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE,
+    USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE, CONTACT_METHOD_TABLE,
 } = require("../../constants/const");
 
 
@@ -28,6 +28,7 @@ module.exports = {
     },
 
     addUserContactMethodsToDB:async (uid, contactDetails)=>{
-        await knex(USER_CONTACT_METHOD_TABLE.NAME).insert(contactDetails).onConflict(contactDetails).merge();
+        await knex(USER_CONTACT_METHOD_TABLE.NAME).insert(contactDetails).onConflict([
+            USER_CONTACT_METHOD_TABLE.USER_ID,USER_CONTACT_METHOD_TABLE.CONTACT_METHOD_ID]).merge();
     }
 };
