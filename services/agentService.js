@@ -8,14 +8,20 @@ module.exports = {
         if (!userDetails[0]) {
             return null; // if agent is archived, wont proceed
         }
+
+        let updatedUser = {};
+
         const {firstName, lastName, location} = userDetails[0];
         const agentLanguages = await getLanguagesByUid(uid);
         const languages = agentLanguages.map(({languageName})=>languageName);
 
         const agentDetails = await getAgentDetailsByUid(uid);
-        const {introduction, statement, profileCompleted,
-        viaPhone, viaMobile, mobileServices} = agentDetails[0];
 
+
+
+        if (agentDetails[0]) {
+           updatedUser = {...agentDetails[0]};
+        }
 
         const socialMedia = {};
         (await getSocialMediaByUid(uid)).forEach(socialM=>{
@@ -28,9 +34,10 @@ module.exports = {
             const key = contactM.contactMethodId.toLowerCase();
             contactDetails[key] = contactM.value
         });
+
         return {
-            firstName, lastName, location, statement, languages, socialMedia, contactDetails, introduction,
-            viaPhone, viaMobile, mobileServices
+            firstName, lastName, location,  languages, socialMedia, contactDetails,
+             ...updatedUser
         }
 
     }
