@@ -64,11 +64,9 @@ module.exports = {
             return {userId:uid,languageId:language}});
         const transaction = await knex.transaction();
         await deleteLanguagesByUid(uid, transaction);
-        if (dbLanguages.length>0)
-        {
+        if (dbLanguages.length>0) {
             await addLanguagesToDBUser(dbLanguages, transaction)
         }
-
         await transaction.commit();
     }
 

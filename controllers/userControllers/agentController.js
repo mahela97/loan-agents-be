@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const {getAgentDetails, editAgentBasicDetails} = require("../../services/agentService");
+const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction} = require("../../services/agentService");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser} = require("../../services/userService");
 module.exports = {
@@ -117,5 +117,43 @@ module.exports = {
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }
+    },
+
+    addAgentIntroduction:async (req,res)=>{
+
+        const schema = Joi.object({
+            introduction: Joi.string().required()
+        })
+
+        const validate = schema.validate(req.body);
+        if (validate.error) {
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const pathSchema = Joi.object({
+            uid: Joi.string().required()
+        });
+        const pathValidate = pathSchema.validate(req.params)
+        if (pathValidate.error) {
+            res.status(400).send({message: pathValidate.error.details})
+            return;
+        }
+        const {introduction} = validate.value;
+        const {uid} = pathValidate.value;
+
+        try{
+           const result = await addAgentIntroduction(uid,introduction);
+           if (result){
+               res.status(201).send({success:1});
+           }
+         else{
+             res.status(404).send({success:0})
+           }
+        }catch (error){
+            if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
+        }
+
     }
 }

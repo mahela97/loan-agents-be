@@ -45,5 +45,9 @@ module.exports = {
         await updateUserDetailsById(uid,{firstName,lastName,location},transaction);
         await updateAgentDetails(uid,{statement},transaction);
         await transaction.commit();
+    },
+
+    addAgentIntroduction:async (uid,introduction) =>{
+        return updateAgentDetails(uid,{introduction}, null);
     }
 }

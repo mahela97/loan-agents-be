@@ -2,6 +2,7 @@ const {testService, registerUser, addLanguagesToUser} = require("../../services/
 const Joi = require("joi");
 const {string} = require("joi");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
+const admin = require("firebase-admin");
 module.exports = {
     test: (req, res) => {
         console.log("here");
@@ -26,10 +27,13 @@ module.exports = {
             return;
         }
         const body = validate.value;
+        let uid;
         try {
             const result = await registerUser(body);
+            uid = result;
             res.status(201).send({success: 1, data: {userId: result}});
         } catch (error) {
+            await admin.auth().deleteUser(uid);
             if (error.errorInfo) {
                 const message = handleFirebase(error);
                 res.status(400).send(message);
@@ -61,7 +65,7 @@ module.exports = {
             await addLanguagesToUser(uid,body);
             res.status(201).send({success: 1});
         } catch (error) {
-            console.log(error)
+
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }
