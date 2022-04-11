@@ -1,15 +1,16 @@
 module.exports = {
     USER_TABLE: {
-        NAME:  "user",
+        NAME: "user",
         USER_ID: "userId",
         FIRST_NAME: "firstName",
         LAST_NAME: "lastName",
         LOCATION: "location",
-        values:{
-            AGENT:"agent"
+        values: {
+            AGENT: "agent"
         }
     },
-    COMMON: {ARCHIVED: "archived",
+    COMMON: {
+        ARCHIVED: "archived",
         SELECT_ALL: "*"
     },
     USER_CONTACT_METHOD_TABLE: {
@@ -26,7 +27,7 @@ module.exports = {
     LANGUAGE_TABLE: {
         NAME: "language",
         LANGUAGE_NAME: "languageName",
-            LANGUAGE_ID: "languageId"
+        LANGUAGE_ID: "languageId"
     },
     AGENT_LANGUAGE_TABLE: {
         NAME: "agentLanguage",
@@ -34,7 +35,7 @@ module.exports = {
         LANGUAGE_ID: "languageId"
     },
     CONTACT_METHOD_TABLE: {
-        NAME:  "contactMethod",
+        NAME: "contactMethod",
         CONTACT_METHOD_ID: "contactMethodId",
         TYPE: "type",
         values: {
@@ -52,5 +53,13 @@ module.exports = {
     SITE_META_DATA_TABLE: {
         NAME: "siteMetaData"
     },
+    EDUCATION_TABLE: {
+        EDUCATION_ID:"educationId",
+        NAME: "education"
+    },
+    QUALIFICATION_TABLE: {
+        NAME: "qualification"
+        ,QUALIFICATION_ID: "wid"
+    }
 
 };

@@ -1,7 +1,9 @@
 const Joi = require("joi");
-const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction} = require("../../services/agentService");
+const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEducation, updateAgentEducation,
+    deleteAgentEducation
+} = require("../../services/userServices/agentService");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
-const { addContactDetailToUser} = require("../../services/userService");
+const { addContactDetailToUser} = require("../../services/userServices/userService");
 module.exports = {
     getAgent: async (req, res) => {
         const schema = Joi.object({
@@ -154,6 +156,112 @@ module.exports = {
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }
+    },
 
+    addAgentEducation:async (req,res)=>{
+        const schema = Joi.object({
+            institutionName: Joi.string().required(),
+            fieldOfStudy:Joi.string().required(),
+            startDate:Joi.date().required(),
+            endDate:Joi.date().required()
+        })
+
+        const validate = schema.validate(req.body, {abortEarly: false});
+        if (validate.error) {
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const pathSchema = Joi.object({
+            uid: Joi.string().required()
+        });
+        const pathValidate = pathSchema.validate(req.params)
+        if (pathValidate.error) {
+            res.status(400).send({message: pathValidate.error.details})
+            return;
+        }
+        const educationDetails = validate.value;
+        const {uid} = pathValidate.value;
+
+        try{
+            const result = await addAgentEducation(uid,educationDetails);
+            if (result){
+                res.status(201).send({success:1});
+            }
+            else{
+                res.status(404).send({success:0})
+            }
+        }catch (error){
+            if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
+        }
+    },
+
+    updateAgentEducation:async (req,res)=>{
+
+        const schema = Joi.object({
+            institutionName: Joi.string().allow(""),
+            fieldOfStudy:Joi.string().allow(""),
+            startDate:Joi.date().required(),
+            endDate:Joi.date().allow(null).default(null)
+        })
+
+        const validate = schema.validate(req.body, {abortEarly: false});
+        if (validate.error) {
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const pathSchema = Joi.object({
+            uid: Joi.string().required(),
+            eid: Joi.string().required()
+        });
+        const pathValidate = pathSchema.validate(req.params)
+        if (pathValidate.error) {
+            res.status(400).send({message: pathValidate.error.details})
+            return;
+        }
+        const educationDetails = validate.value;
+        const {eid} = pathValidate.value;
+
+        try{
+            const result = await updateAgentEducation( eid, educationDetails);
+            if (result){
+                res.status(201).send({success:1});
+            }
+            else{
+                res.status(404).send({success:0})
+            }
+        }catch (error){
+            if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
+        }
+    },
+
+    deleteAgentEducation:async (req,res)=>{
+
+        const pathSchema = Joi.object({
+            uid: Joi.string().required(),
+            eid: Joi.string().required()
+        });
+        const pathValidate = pathSchema.validate(req.params)
+        if (pathValidate.error) {
+            res.status(400).send({message: pathValidate.error.details})
+            return;
+        }
+        const { eid} = pathValidate.value;
+
+        try{
+            const result = await deleteAgentEducation(eid);
+            if (result){
+                res.status(201).send({success:1});
+            }
+            else{
+                res.status(404).send({success:0})
+            }
+        }catch (error){
+            if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
+        }
     }
 }

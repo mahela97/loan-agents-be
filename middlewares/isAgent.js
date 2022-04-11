@@ -1,4 +1,4 @@
-const {getUserByUid} = require("../services/userService");
+const {getUserByUid} = require("../services/userServices/userService");
 
 const isAgent = async (req ,
                          res ,

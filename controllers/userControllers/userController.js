@@ -1,4 +1,4 @@
-const {testService, registerUser, addLanguagesToUser} = require("../../services/userService");
+const {testService, registerUser, addLanguagesToUser} = require("../../services/userServices/userService");
 const Joi = require("joi");
 const {string} = require("joi");
 const handleFirebase = require("../../utils/firebaseErrorhandler");

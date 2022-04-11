@@ -1,10 +1,11 @@
-const {getDbUserById, updateUserDetailsById} = require("../repositories/userRepositories/userRepository");
-const {getLanguagesByUid} = require("../repositories/publicRepository/languageRepository");
-const {getAgentDetailsByUid, updateAgentDetails} = require("../repositories/userRepositories/agentRepository");
+const {getDbUserById, updateUserDetailsById} = require("../../repositories/userRepositories/userRepository");
+const {getLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
+const {getAgentDetailsByUid, updateAgentDetails} = require("../../repositories/userRepositories/agentRepository");
 const {
     getSocialMediaByUid, getContactDetailsByUid
-} = require("../repositories/socialMediaRepositories/socialMediaRepository");
-const knex = require("../db/db-config");
+} = require("../../repositories/socialMediaRepositories/socialMediaRepository");
+const knex = require("../../db/db-config");
+const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
 module.exports = {
     getAgentDetails: async (uid) => {
         const userDetails = await getDbUserById(uid);
@@ -49,5 +50,18 @@ module.exports = {
 
     addAgentIntroduction:async (uid,introduction) =>{
         return updateAgentDetails(uid,{introduction}, null);
+    },
+
+    addAgentEducation:async (uid, educationDetails) =>{
+        educationDetails.userId = uid;
+        return addEducationToDB(educationDetails);
+    },
+
+    updateAgentEducation:async (eid, educationDetails) =>{
+        return updateEducationInDB(eid, educationDetails);
+    },
+
+    deleteAgentEducation:async (eid) =>{
+        return deleteEducationInDB(eid);
     }
 }

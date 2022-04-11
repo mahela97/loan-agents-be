@@ -1,12 +1,12 @@
 const {
     createDbUser, getDbUserById, addUserContactMethodsToDB,
-} = require("../repositories/userRepositories/userRepository");
+} = require("../../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
 const {
     CONTACT_METHOD_TABLE,
-} = require("../constants/const");
-const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../repositories/publicRepository/languageRepository");
-const knex = require("../db/db-config");
+} = require("../../constants/const");
+const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
+const knex = require("../../db/db-config");
 module.exports = {
     testService: () => {
         console.log("here")

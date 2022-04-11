@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+    <changeSet author="mahela" id="13">
+        <createTable tableName="education" schemaName="public">
+            <column name="userId" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="educationId" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_education" unique="true"/>
+            </column>
+            <column name="fieldOfStudy" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="institutionName" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="startDate" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="endDate" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="14">
+        <addAutoIncrement catalogName="education"
+                          columnDataType="int"
+                          columnName="educationId"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="100"
+                          tableName="education"/>
+    </changeSet>
+
+    <changeSet author="mahela" id="15">
+        <addForeignKeyConstraint baseColumnNames="userId"
+                                 baseTableName="education"
+                                 constraintName="fk_user_education"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+
+    <changeSet author="mahela" id="16">
+        <createTable tableName="qualification" schemaName="public">
+            <column name="userId" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="qualificationId" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_qualification" unique="true"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="companyName" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="startDate" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="endDate" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="17">
+        <addAutoIncrement catalogName="qualification"
+                          columnDataType="int"
+                          columnName="qualificationId"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="100"
+                          tableName="qualification"/>
+    </changeSet>
+
+    <changeSet author="mahela" id="18">
+        <addForeignKeyConstraint baseColumnNames="userId"
+                                 baseTableName="qualification"
+                                 constraintName="fk_user_qualification"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+</databaseChangeLog>
