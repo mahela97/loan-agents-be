@@ -41,11 +41,11 @@ module.exports = {
         const bucket = await getStorageBucket();
         const fileObject = await bucket.file(`${path}${fileName}`);
         if (await isFileExist(path,fileName)){
-            return fileObject.getSignedUrl({
+            return (await fileObject.getSignedUrl({
                 version: 'v4',
                 action: 'read',
                 expires: Date.now() + 604800, // 15 minutes
-            });
+            }))[0];
         }
     },
 
