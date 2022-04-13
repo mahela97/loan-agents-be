@@ -6,6 +6,8 @@ const {
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
 const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
+const {getFile} = require("../storageService");
+const {STORAGE} = require("../../constants/const");
 module.exports = {
     getAgentDetails: async (uid) => {
         const userDetails = await getDbUserById(uid);
@@ -16,6 +18,7 @@ module.exports = {
         let updatedUser = {};
 
         const {firstName, lastName, location} = userDetails[0];
+        const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
 
@@ -36,7 +39,7 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, location, languages, socialMedia, contactDetails, ...updatedUser,uid
+            firstName, lastName, profilePhoto, location, languages, socialMedia, contactDetails, ...updatedUser,uid
         }
 
     }, editAgentBasicDetails: async (uid, details) => {

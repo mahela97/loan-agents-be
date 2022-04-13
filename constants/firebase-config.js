@@ -15,6 +15,7 @@ const initializeFirebase = () => {
             auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
             client_x509_cert_url:
                 "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2lcb2%40loan-agents.iam.gserviceaccount.com",
+            storageBucket: "gs://loan-agents.appspot.com"
         }),
     });
 };

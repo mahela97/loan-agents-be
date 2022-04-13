@@ -25,8 +25,8 @@ module.exports = {
             res.status(201).send(agentDetails)
 
         } catch (error) {
-            console.log(error)
-            res.status(401).send(error)
+            if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
         }
     },
 

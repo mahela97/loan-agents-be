@@ -60,6 +60,12 @@ module.exports = {
     QUALIFICATION_TABLE: {
         NAME: "qualification"
         ,QUALIFICATION_ID: "wid"
+    },
+    STORAGE: {
+        BUCKET_NAME: "gs://loan-agents.appspot.com",
+        LOCATIONS:{
+            USERS: "loan-agents/images/users/"
+        }
     }
 
 };

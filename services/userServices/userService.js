@@ -3,13 +3,15 @@ const {
 } = require("../../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
 const {
-    CONTACT_METHOD_TABLE,
+    CONTACT_METHOD_TABLE, STORAGE,
 } = require("../../constants/const");
 const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const knex = require("../../db/db-config");
+const {getFile} = require("../storageService");
+
+
 module.exports = {
-    testService: () => {
-        console.log("here")
+    testService:async () => {
     },
     registerUser: async (data) => {
         const {email, phone, password} = data;
@@ -43,7 +45,12 @@ module.exports = {
     },
 
     getUserByUid: async (uid) => {
-        return getDbUserById(uid);
+        const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
+        const result = (await getDbUserById(uid))[0];
+        if (profilePhoto) {
+            result.profilePhoto = profilePhoto
+        }
+        return result
 
     },
 
