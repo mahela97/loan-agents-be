@@ -1,5 +1,6 @@
 const {getUserByUid} = require("./userServices/userService");
-const {getChatRoomIdByUids, saveMessageToDB} = require("../repositories/messageRepositories/messageRepository");
+const { saveMessageToDB, getChatListFromDB, getConversationIdByUid, createConversation} = require("../repositories/messageRepositories/messageRepository");
+const knex = require("../db/db-config");
 module.exports = {
     sendMessage:async ({sender, receiver, message})=>{
         const isSenderExist = await getUserByUid(sender);
@@ -11,8 +12,18 @@ module.exports = {
         if (!isReceiverExist){
             throw  new Error("Receiver does not exist in the system")
         }
-        await saveMessageToDB(receiver,sender,message);
 
+        const transaction =await knex.transaction();
+        let conversationId = await getConversationIdByUid(sender,receiver)
+        if (!conversationId){
+            conversationId = await createConversation(sender, receiver, transaction)
+        }
+        await saveMessageToDB(conversationId, sender, message, transaction);
+        await transaction.commit();
+    },
 
+    getMessageList:async ({user1, user2})=>{
+
+        await getChatListFromDB(user1, user2)
     }
 }

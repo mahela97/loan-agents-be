@@ -63,9 +63,13 @@ module.exports = {
     },
     MESSAGE_TABLE: {
         NAME: "message",
+        SENDER_ID: "senderId",
+        RECEIVER_ID: "receiverId"
     },
-    CHAT_ROOM_TABLE: {
-        NAME: "chatRoom"
+    CONVERSATION_TABLE: {
+        NAME: "conversation",
+        PARTICIPANT_ID :"participantId",
+        CONVERSATION_ID: "conversationId"
     },
     STORAGE: {
         BUCKET_NAME: "gs://loan-agents.appspot.com",

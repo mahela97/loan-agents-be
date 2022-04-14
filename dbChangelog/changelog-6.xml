@@ -24,26 +24,22 @@
             <column name="senderId" type="VARCHAR(30)">
                 <constraints nullable="false"/>
             </column>
-            <column name="receiverId" type="VARCHAR(30)">
-                <constraints nullable="false"/>
+            <column name="conversationId" type="${uuid_type}" >
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
 
-<!--    <changeSet author="mahela" id="20">-->
-<!--        <createTable tableName="chatMember" schemaName="public">-->
-<!--            <column name="chatId" type="${uuid_type}" defaultValueComputed="${uuid_function}"/>-->
-<!--            <column name="userId" type="VARCHAR(30)">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column  name="roomId" type="${uuid_type}">-->
-<!--                <constraints nullable="false"/>-->
-<!--            </column>-->
-<!--            <column name="">-->
-
-<!--            </column>-->
-<!--        </createTable>-->
-<!--    </changeSet>-->
+    <changeSet author="mahela" id="20">
+        <createTable tableName="conversation" schemaName="public">
+            <column name="conversationId" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+            <constraints nullable="false" primaryKey="true" primaryKeyName="pk_conversation"/>
+            </column>
+            <column name="participantId" type="VARCHAR(30)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_conversation1"/>
+            </column>
+        </createTable>
+    </changeSet>
 
 <!--    <changeSet author="mahela" id="21">-->
 <!--        <createTable tableName="chatRoom" schemaName="public">-->
@@ -57,7 +53,7 @@
 <!--    </changeSet>-->
 
     <changeSet author="mahela" id="22">
-        <addForeignKeyConstraint baseColumnNames="sender"
+        <addForeignKeyConstraint baseColumnNames="senderId"
                                  baseTableName="message"
                                  constraintName="fk_user_message_sender"
                                  referencedColumnNames="userId"
@@ -65,23 +61,15 @@
         />
     </changeSet>
 
-    <changeSet author="mahela" id="23">
-        <addForeignKeyConstraint baseColumnNames="receiver"
-                                 baseTableName="message"
-                                 constraintName="fk_user_message_receiver"
+
+    <changeSet author="mahela" id="24">
+        <addForeignKeyConstraint baseColumnNames="participantId"
+                                 baseTableName="conversation"
+                                 constraintName="fk_user_conversation"
                                  referencedColumnNames="userId"
                                  referencedTableName="user"
         />
     </changeSet>
-
-<!--    <changeSet author="mahela" id="24">-->
-<!--        <addForeignKeyConstraint baseColumnNames="roomId"-->
-<!--                                 baseTableName="message"-->
-<!--                                 constraintName="fk_message_chatRoom"-->
-<!--                                 referencedColumnNames="roomId"-->
-<!--                                 referencedTableName="chatRoom"-->
-<!--        />-->
-<!--    </changeSet>-->
 
 <!--    <changeSet author="mahela" id="25">-->
 <!--        <addForeignKeyConstraint baseColumnNames="userId"-->
@@ -93,3 +81,5 @@
 <!--    </changeSet>-->
 
 </databaseChangeLog>
+
+
