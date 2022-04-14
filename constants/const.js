@@ -11,7 +11,9 @@ module.exports = {
     },
     COMMON: {
         ARCHIVED: "archived",
-        SELECT_ALL: "*"
+        SELECT_ALL: "*",
+        DESC: "desc",
+        ASC: "asc"
     },
     USER_CONTACT_METHOD_TABLE: {
         CONTACT_METHOD_ID: "contactMethodId",
@@ -64,7 +66,11 @@ module.exports = {
     MESSAGE_TABLE: {
         NAME: "message",
         SENDER_ID: "senderId",
-        RECEIVER_ID: "receiverId"
+        MESSAGE_ID: "messageId",
+        MESSAGE: "message",
+        CREATED_AT: "createdAt",
+        READ: "read",
+        CONVERSATION_ID: "conversationId"
     },
     CONVERSATION_TABLE: {
         NAME: "conversation",

@@ -9,7 +9,6 @@ const isAgent = async (req ,
     }
     const uid = req.user.uid;
         const user = await getUserByUid(uid.toString());
-        console.log(user)
         if (user.role==="agent"){
             next();
         }else{

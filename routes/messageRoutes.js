@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const {validateFirebaseIdToken} = require("../middlewares/validateFirebaseIdToken");
-const {sendMessage, getChatList} = require("../controllers/messageController/messageController");
+const {sendMessage, getConversationList} = require("../controllers/messageController/messageController");
 
 
 //router.use(validateFirebaseIdToken);
 
 router.post("/", sendMessage)
-router.get("/chat", getChatList )
-router.get("/chatList", getChatList )
+router.get("/conversationList", getConversationList )
+// router.get("/conversation", getChatList )
 
 
 module.exports = router;

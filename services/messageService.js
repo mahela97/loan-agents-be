@@ -1,5 +1,7 @@
 const {getUserByUid} = require("./userServices/userService");
-const { saveMessageToDB, getChatListFromDB, getConversationIdByUid, createConversation} = require("../repositories/messageRepositories/messageRepository");
+const { saveMessageToDB, getChatListFromDB, getConversationIdByUid, createConversation, getConversationIdsForUid,
+    getOtherParticipant, getLastMessageByConversationId
+} = require("../repositories/messageRepositories/messageRepository");
 const knex = require("../db/db-config");
 module.exports = {
     sendMessage:async ({sender, receiver, message})=>{
@@ -18,6 +20,7 @@ module.exports = {
         if (!conversationId){
             conversationId = await createConversation(sender, receiver, transaction)
         }
+
         await saveMessageToDB(conversationId, sender, message, transaction);
         await transaction.commit();
     },
@@ -25,5 +28,36 @@ module.exports = {
     getMessageList:async ({user1, user2})=>{
 
         await getChatListFromDB(user1, user2)
+    },
+
+    getConversationList:async (uid)=>{
+
+        const conversationIds = await getConversationIdsForUid(uid);
+        if (conversationIds.length === 0){
+            return conversationIds;
+        }
+
+        const conversationList  = await Promise.all(
+            conversationIds.map( (async ({conversationId})=>{
+                const conversation = {};
+                const otherParticipantId = await getOtherParticipant(conversationId, uid);
+                const otherParticipant = await getUserByUid(otherParticipantId)
+
+                if (otherParticipant){
+                    const {firstName, lastName, userId, profilePhoto} = otherParticipant
+                    conversation.otherParticipant = {firstName, lastName, userId, profilePhoto};
+                }
+
+                const lastMessage = await getLastMessageByConversationId(conversationId);
+
+                if (lastMessage){
+                    conversation.lastMessage = lastMessage;
+                }
+                conversation.conversationId = conversationId;
+                return conversation
+
+            }))
+        );
+        return conversationList;
     }
 }
