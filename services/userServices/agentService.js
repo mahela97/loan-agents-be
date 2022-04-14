@@ -11,13 +11,13 @@ const {STORAGE} = require("../../constants/const");
 module.exports = {
     getAgentDetails: async (uid) => {
         const userDetails = await getDbUserById(uid);
-        if (!userDetails[0]) {
+        if (!userDetails) {
             return null; // if agent is archived, wont proceed
         }
 
         let updatedUser = {};
 
-        const {firstName, lastName, location} = userDetails[0];
+        const {firstName, lastName, location} = userDetails;
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);

@@ -61,6 +61,12 @@ module.exports = {
         NAME: "qualification"
         ,QUALIFICATION_ID: "wid"
     },
+    MESSAGE_TABLE: {
+        NAME: "message",
+    },
+    CHAT_ROOM_TABLE: {
+        NAME: "chatRoom"
+    },
     STORAGE: {
         BUCKET_NAME: "gs://loan-agents.appspot.com",
         LOCATIONS:{

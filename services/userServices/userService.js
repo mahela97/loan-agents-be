@@ -45,8 +45,11 @@ module.exports = {
     },
 
     getUserByUid: async (uid) => {
+        const result = await getDbUserById(uid);
+        if (!result){
+            return null;
+        }
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
-        const result = (await getDbUserById(uid))[0];
         if (profilePhoto) {
             result.profilePhoto = profilePhoto
         }

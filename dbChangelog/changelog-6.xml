@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="uuid_generate_v4()" dbms="postgresql"/>
+
+    <changeSet author="mahela" id="19">
+        <createTable tableName="message" schemaName="public">
+            <column name="messageId" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_message" unique="true"/>
+            </column>
+            <column name="message" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdAt" type="TIMESTAMPTZ" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="read" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="senderId" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiverId" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+<!--    <changeSet author="mahela" id="20">-->
+<!--        <createTable tableName="chatMember" schemaName="public">-->
+<!--            <column name="chatId" type="${uuid_type}" defaultValueComputed="${uuid_function}"/>-->
+<!--            <column name="userId" type="VARCHAR(30)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column  name="roomId" type="${uuid_type}">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="">-->
+
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet author="mahela" id="21">-->
+<!--        <createTable tableName="chatRoom" schemaName="public">-->
+<!--            <column name="roomId" type="${uuid_type}" defaultValueComputed="${uuid_function}">-->
+<!--            <constraints nullable="false" primaryKey="true" primaryKeyName="pk_chatRoom" unique="true"/>-->
+<!--            </column>-->
+<!--            <column name="name" type="VARCHAR(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+    <changeSet author="mahela" id="22">
+        <addForeignKeyConstraint baseColumnNames="sender"
+                                 baseTableName="message"
+                                 constraintName="fk_user_message_sender"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+
+    <changeSet author="mahela" id="23">
+        <addForeignKeyConstraint baseColumnNames="receiver"
+                                 baseTableName="message"
+                                 constraintName="fk_user_message_receiver"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+
+<!--    <changeSet author="mahela" id="24">-->
+<!--        <addForeignKeyConstraint baseColumnNames="roomId"-->
+<!--                                 baseTableName="message"-->
+<!--                                 constraintName="fk_message_chatRoom"-->
+<!--                                 referencedColumnNames="roomId"-->
+<!--                                 referencedTableName="chatRoom"-->
+<!--        />-->
+<!--    </changeSet>-->
+
+<!--    <changeSet author="mahela" id="25">-->
+<!--        <addForeignKeyConstraint baseColumnNames="userId"-->
+<!--                                 baseTableName="message"-->
+<!--                                 constraintName="fk_message_user"-->
+<!--                                 referencedColumnNames="userId"-->
+<!--                                 referencedTableName="user"-->
+<!--        />-->
+<!--    </changeSet>-->
+
+</databaseChangeLog>

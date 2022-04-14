@@ -19,7 +19,7 @@ module.exports = {
     },
 
     getDbUserById:async(userId)=>{
-        return knex(USER_TABLE.NAME).select(COMMON.SELECT_ALL).where(USER_TABLE.USER_ID, userId).where(COMMON.ARCHIVED, false);
+        return (await knex(USER_TABLE.NAME).select(COMMON.SELECT_ALL).where(USER_TABLE.USER_ID, userId).where(COMMON.ARCHIVED, false))[0];
     },
 
     updateUserDetailsById:async (userId,details,transaction)=>{

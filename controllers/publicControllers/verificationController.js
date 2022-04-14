@@ -1,6 +1,6 @@
 const {getCode, verifyCode} = require("../../services/publicService");
 const Joi = require("joi");
-const getErrorObject = require("../../utils/commonErrorhandler");
+const {getErrorObject} = require("../../utils/commonErrorhandler");
 
 module.exports = {
     getCode: async (req, res) => {
