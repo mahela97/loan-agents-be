@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const {commonError} = require("../../utils/commonErrorhandler");
-const {sendMessage, getMessageList, getConversationList} = require("../../services/messageService");
+const {sendMessage, getConversation, getConversationList} = require("../../services/messageService");
 module.exports = {
     sendMessage:async (req,res)=>{
         const schema = Joi.object({
@@ -25,8 +25,9 @@ module.exports = {
 
     getConversation:async (req,res)=>{
         const schema = Joi.object({
-            user1: Joi.string().required(),
-            user2: Joi.string().required(),
+            cid: Joi.string().required(),
+            uid: Joi.string().required()
+
         })
 
         const validate = schema.validate(req.query, {abortEarly:false})
@@ -35,10 +36,10 @@ module.exports = {
             return;
         }
 
-        const users = validate.value;
+        const {cid, uid} = validate.value;
 
         try{
-            const messages = await getMessageList(users);
+            const messages = await getConversation(cid, uid);
             res.status(201).send({success:1, messages})
         }catch(error){
             commonError(error,res)

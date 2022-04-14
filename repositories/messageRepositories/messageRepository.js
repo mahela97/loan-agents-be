@@ -16,17 +16,6 @@ module.exports = {
         return null;
     },
 
-    getChatListFromDB: async (user1, user2 )=>{
-        const result = await knex(MESSAGE_TABLE.NAME)
-            .select(COMMON.SELECT_ALL)
-            .where(MESSAGE_TABLE.SENDER_ID, user1)
-            .andWhere(MESSAGE_TABLE.RECEIVER_ID, user2)
-            .orWhere(MESSAGE_TABLE.SENDER_ID, user2)
-            .andWhere(MESSAGE_TABLE.RECEIVER_ID, user1)
-
-        console.log(result)
-    },
-
     createConversation:async (user1, user2, transaction) =>{
 
         const {conversationId} = (await knex(CONVERSATION_TABLE.NAME)
@@ -64,6 +53,15 @@ module.exports = {
                 .limit(1)
 
         )[0];
+    },
+
+    getConversationById:async (conversationId) =>{
+
+       return (
+           await knex(MESSAGE_TABLE.NAME)
+               .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID])
+               .where(MESSAGE_TABLE.CONVERSATION_ID, conversationId)
+       )
     }
 
 }
