@@ -49,7 +49,7 @@ module.exports = {
         return (await knex(MESSAGE_TABLE.NAME)
             .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID, MESSAGE_TABLE.READ])
                 .where(MESSAGE_TABLE.CONVERSATION_ID, conversationId)
-                .orderBy(MESSAGE_TABLE.CREATED_AT, COMMON.DESC)
+                .orderBy(MESSAGE_TABLE.CREATED_AT, COMMON.ASC)
                 .limit(1)
 
         )[0];
