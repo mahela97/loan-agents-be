@@ -47,7 +47,7 @@ module.exports = {
     getLastMessageByConversationId:async (conversationId) =>{
 
         return (await knex(MESSAGE_TABLE.NAME)
-            .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID])
+            .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID, MESSAGE_TABLE.READ])
                 .where(MESSAGE_TABLE.CONVERSATION_ID, conversationId)
                 .orderBy(MESSAGE_TABLE.CREATED_AT, COMMON.DESC)
                 .limit(1)
@@ -59,7 +59,7 @@ module.exports = {
 
        return (
            await knex(MESSAGE_TABLE.NAME)
-               .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID])
+               .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID,  MESSAGE_TABLE.READ])
                .where(MESSAGE_TABLE.CONVERSATION_ID, conversationId)
        )
     }
