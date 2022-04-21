@@ -16,6 +16,10 @@ app.use(cors());
 
 app.use("/", require("./routes"));
 
+app.get("/", (req,res)=>{
+    res.send(`Loan Agents BE Server, your ip - ${req.headers['x-forwarded-for'] || req.socket.remoteAddress }`)
+});
+
 const server = app.listen(process.env.PORT, () => {
     console.log("Server is running on", process.env.PORT || 8080);
 });
