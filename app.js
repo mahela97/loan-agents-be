@@ -17,7 +17,7 @@ app.use(cors());
 app.use("/", require("./routes"));
 
 app.get("/", (req,res)=>{
-    res.send("Loan Agents BE Server")
+    res.send(`Loan Agents BE Server, your ip - ${req.headers['x-forwarded-for'] || req.socket.remoteAddress }`)
 });
 
 const server = app.listen(process.env.PORT, () => {
