@@ -48,7 +48,7 @@ module.exports = {
             return conversationIds;
         }
 
-        return await Promise.all(
+        const conversations =  (await Promise.all(
             conversationIds.map((async ({conversationId}) => {
                 const conversation = {};
                 const otherParticipantId = await getOtherParticipant(conversationId, uid);
@@ -68,6 +68,12 @@ module.exports = {
                 return conversation
 
             }))
-        );
+        )).filter(conversation => conversation.lastMessage);
+
+        return conversations.sort(function(x, y){
+                return y.lastMessage.createdAt - x.lastMessage.createdAt
+
+        })
+
     }
 }
