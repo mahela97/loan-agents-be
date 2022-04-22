@@ -8,6 +8,7 @@ const knex = require("../../db/db-config");
 const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
 const {getFile} = require("../storageService");
 const {STORAGE} = require("../../constants/const");
+
 module.exports = {
     getAgentDetails: async (uid) => {
         const userDetails = await getDbUserById(uid);
@@ -66,5 +67,9 @@ module.exports = {
 
     deleteAgentEducation:async (eid) =>{
         return deleteEducationInDB(eid);
+    },
+
+    addAgentContactVia:async (uid, details) =>{
+        return updateAgentDetails(uid, details, null)
     }
 }

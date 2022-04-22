@@ -2,7 +2,7 @@ const {validateFirebaseIdToken} = require("../middlewares/validateFirebaseIdToke
 const router = require("express").Router();
 const {isAgent} = require("../middlewares/isAgent");
 const {getAgent, editAgentDetails, addAgentSocialMedia, addAgentContactDetail,
-    addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation
+    addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation, addAgentContactVia
 } = require("../controllers/userControllers/agentController");
 
 // router.use(isAgent);
@@ -11,6 +11,7 @@ router.patch("/:uid/basicDetails", editAgentDetails);
 router.post("/:uid/socialMedia", addAgentSocialMedia);
 router.post("/:uid/contactDetail",addAgentContactDetail)
 router.patch("/:uid/introduction", addAgentIntroduction);
+router.patch("/:uid/contactVia", addAgentContactVia);
 
 //education routes
 router.post("/:uid/education",addAgentEducation)

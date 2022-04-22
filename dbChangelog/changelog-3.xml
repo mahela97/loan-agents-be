@@ -14,7 +14,7 @@
             <column name="statement" type="VARCHAR(255)" >
                 <constraints nullable="true" />
             </column>
-            <column name="viaPhone" type="BOOLEAN" defaultValueBoolean="false" >
+            <column name="viaVideo" type="BOOLEAN" defaultValueBoolean="false" >
                 <constraints nullable="false" />
             </column>
             <column name="viaMobile" type="BOOLEAN" defaultValueBoolean="false">
