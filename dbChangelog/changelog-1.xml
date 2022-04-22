@@ -22,6 +22,15 @@
             <column name="referredBy" type="VARCHAR(30)">
                 <constraints nullable="true"/>
             </column>
+            <column name="country" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postalCode" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="longitude" type="VARCHAR(20)">
                 <constraints nullable="true"/>
             </column>

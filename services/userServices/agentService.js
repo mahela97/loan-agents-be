@@ -17,7 +17,7 @@ module.exports = {
 
         let updatedUser = {};
 
-        const {firstName, lastName, location} = userDetails;
+        const {firstName, lastName, city, country, postalCode} = userDetails;
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
@@ -39,14 +39,14 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, profilePhoto, location, languages, socialMedia, contactDetails, ...updatedUser,uid
+            firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia, contactDetails, ...updatedUser,uid
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
         const transaction = await knex.transaction();
-        const {firstName, lastName, location} = details;
+        const {firstName, lastName, country, city, postalCode} = details;
         const {statement} = details;
-        await updateUserDetailsById(uid,{firstName,lastName,location},transaction);
+        await updateUserDetailsById(uid,{firstName,lastName,country, city, postalCode},transaction);
         await updateAgentDetails(uid,{statement},transaction);
         await transaction.commit();
     },
