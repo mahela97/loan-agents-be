@@ -35,7 +35,9 @@ module.exports = {
             firstName: Joi.string().required(),
             lastName: Joi.string().required(),
             statement: Joi.string().required(),
-            location: Joi.string().required(),
+            city: Joi.string().required(),
+            country: Joi.string().required(),
+            postalCode: Joi.string().required()
         })
 
         const pathSchema = Joi.object({
