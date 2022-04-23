@@ -13,6 +13,12 @@ module.exports = {
         NAME: "loanType",
         LOAN_ID: "loanId"
     },
+    AGENT_LOAN_TYPE_TABLE: {
+        NAME: "agentLoanType",
+        USER_ID:"userId",
+        LOAN_ID: "loanId"
+    }
+    ,
     COMMON: {
         ARCHIVED: "archived",
         SELECT_ALL: "*",

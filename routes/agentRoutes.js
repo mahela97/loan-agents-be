@@ -25,7 +25,7 @@ router.patch("/:uid/work/:wid")
 router.delete("/:uid/work/:wid")
 
 //loan routes
-router.patch(":uid/loan", updateAgentLoanTypes)
+router.patch("/:uid/loan", updateAgentLoanTypes)
 
 
 module.exports = router;

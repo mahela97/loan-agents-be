@@ -6,9 +6,9 @@ const {
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
 const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
-const {addLoanTypesToDb} = require("../../repositories/loanRepository")
 const {getFile} = require("../storageService");
 const {STORAGE} = require("../../constants/const");
+const {deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid} = require("../../repositories/publicRepository/loanRepository");
 
 module.exports = {
     getAgentDetails: async (uid) => {
@@ -23,6 +23,7 @@ module.exports = {
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
+        const loanTypes = await getAgentLoanTypesByUid(uid);
 
         if (agentDetails[0]) {
             updatedUser = {...agentDetails[0]};
@@ -41,7 +42,7 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia, contactDetails, ...updatedUser,uid
+            firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia, contactDetails, ...updatedUser,uid,loanTypes
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
@@ -79,7 +80,7 @@ module.exports = {
             return {userId:uid,loanId:loan}});
         const transaction = await knex.transaction();
         await deleteLoanTypeByUid(uid, transaction);
-        if (dbLoanType.length>0) {
+        if (dbLoanTypes.length>0) {
             await addLoanTypesToDb(dbLoanTypes, transaction)
         }
         await transaction.commit();

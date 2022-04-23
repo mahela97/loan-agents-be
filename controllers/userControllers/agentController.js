@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEducation, updateAgentEducation,
-    deleteAgentEducation, addAgentContactVia, addAgentLoanTypes
+    deleteAgentEducation, addAgentContactVia, addLoanTypeToAgent
 } = require("../../services/userServices/agentService");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser, addLanguagesToUser} = require("../../services/userServices/userService");
@@ -322,7 +322,7 @@ module.exports = {
         const body = validate.value;
         const {uid} = pathValidate.value;
         try {
-            await addAgentLoanTypes(uid,body);
+            await addLoanTypeToAgent(uid,body);
             res.status(201).send({success: 1});
         } catch (error) {
 
