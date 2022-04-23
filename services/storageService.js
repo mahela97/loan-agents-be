@@ -33,7 +33,6 @@ module.exports = {
         if (await isFileExist(path, fileName)){
             await fileObject.delete();
         }
-        else {throw new Error("File not found")}
     },
 
     getFile:async (path,fileName)=>{

@@ -92,7 +92,7 @@ module.exports = {
         BUCKET_NAME: "gs://loan-agents.appspot.com",
         LOCATIONS:{
             USERS: "loan-agents/images/users/",
-            LOAN_ICONS: "loan-agents/images/loanTypes/0"
+            LOAN_ICONS: "loan-agents/images/loanTypes/"
         }
     }
 

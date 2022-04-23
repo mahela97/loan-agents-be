@@ -19,9 +19,10 @@ module.exports = {
     addLoanType: async (details)=>{
         const isLoanExist = await isLoanTypeExist(details.loanName);
 
-        if (isLoanExist){
+        if (isLoanExist && isLoanExist.archived){
             await updateLoanTypeByLid(isLoanExist.loanId, {archived: false});
             await deleteFile(STORAGE.LOCATIONS.LOAN_ICONS,details.loanId)
+            return isLoanExist.loanId
         }
         return  (await addLoanTypeDB(details))[0];
     }

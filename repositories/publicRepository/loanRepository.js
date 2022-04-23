@@ -38,7 +38,7 @@ module.exports = {
     },
 
     isLoanTypeExist: async (loanName) => {
-        return (await knex(LOAN_TYPE_TABLE.NAME).select(LOAN_TYPE_TABLE.LOAN_NAME, LOAN_TYPE_TABLE.LOAN_ID).where(LOAN_TYPE_TABLE.LOAN_NAME, loanName))[0]
+        return (await knex(LOAN_TYPE_TABLE.NAME).select(COMMON.SELECT_ALL).where(LOAN_TYPE_TABLE.LOAN_NAME, loanName))[0]
     },
 
     updateLoanTypeByLid: async (lid, details) =>{
