@@ -28,9 +28,9 @@ module.exports ={
         const value = validate.value;
 
         try{
-            const {loanId} = await addLoanType(value);
-            if (loanId && req.file){
-                await addFile(STORAGE.LOCATIONS.LOAN_ICONS,loanId,req.file);
+            const result = await addLoanType(value);
+            if (result && req.file && result.loanId){
+                await addFile(STORAGE.LOCATIONS.LOAN_ICONS,result.loanId,req.file);
             }
             res.status(201).send({success:1})
 

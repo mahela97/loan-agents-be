@@ -11,7 +11,8 @@ module.exports = {
     },
     LOAN_TYPE_TABLE: {
         NAME: "loanType",
-        LOAN_ID: "loanId"
+        LOAN_ID: "loanId",
+        LOAN_NAME:"loanName"
     },
     AGENT_LOAN_TYPE_TABLE: {
         NAME: "agentLoanType",
