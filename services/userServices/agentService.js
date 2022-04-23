@@ -6,6 +6,7 @@ const {
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
 const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
+const {addLoanTypesToDb} = require("../../repositories/loanRepository")
 const {getFile} = require("../storageService");
 const {STORAGE} = require("../../constants/const");
 

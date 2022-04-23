@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEducation, updateAgentEducation,
-    deleteAgentEducation, addAgentContactVia
+    deleteAgentEducation, addAgentContactVia, addAgentLoanTypes
 } = require("../../services/userServices/agentService");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser, addLanguagesToUser} = require("../../services/userServices/userService");

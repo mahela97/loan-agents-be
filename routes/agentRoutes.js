@@ -2,7 +2,8 @@ const {validateFirebaseIdToken} = require("../middlewares/validateFirebaseIdToke
 const router = require("express").Router();
 const {isAgent} = require("../middlewares/isAgent");
 const {getAgent, editAgentDetails, addAgentSocialMedia, addAgentContactDetail,
-    addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation, addAgentContactVia
+    addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation, addAgentContactVia,
+    updateAgentLoanTypes
 } = require("../controllers/userControllers/agentController");
 
 // router.use(isAgent);
