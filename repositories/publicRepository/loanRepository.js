@@ -3,15 +3,15 @@ const {COMMON, LOAN_TYPE_TABLE, AGENT_LOAN_TYPE_TABLE} = require("../../constant
 
 module.exports = {
     getAllLonsDB: async () => {
-        return knex(LOAN_TYPE_TABLE.NAME).select(COMMON.SELECT_ALL);
+        return knex(LOAN_TYPE_TABLE.NAME).select(COMMON.SELECT_ALL).where(COMMON.ARCHIVED, false);
     },
 
     getAgentLoanTypesByUid: async (uid) => {
         return knex(AGENT_LOAN_TYPE_TABLE.NAME)
-            .select(LOAN_TYPE_TABLE.LANGUAGE_NAME, `${LOAN_TYPE_TABLE.NAME}.${LOAN_TYPE_TABLE.LOAN_ID}`)
+            .select(LOAN_TYPE_TABLE.LOAN_NAME, `${LOAN_TYPE_TABLE.NAME}.${LOAN_TYPE_TABLE.LOAN_ID}`)
             .leftJoin(LOAN_TYPE_TABLE.NAME, `${LOAN_TYPE_TABLE.NAME}.${LOAN_TYPE_TABLE.LOAN_ID}`
                 , `${AGENT_LOAN_TYPE_TABLE.NAME}.${AGENT_LOAN_TYPE_TABLE.LOAN_ID}`)
-            .where(AGENT_LOAN_TYPE_TABLE.USER_ID, uid)
+            .where(AGENT_LOAN_TYPE_TABLE.USER_ID, uid).where(COMMON.ARCHIVED, false)
     },
 
     addLoanTypeDB: async (data) => {

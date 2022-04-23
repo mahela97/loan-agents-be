@@ -29,7 +29,7 @@ module.exports = {
     deleteFile:async (path, fileName)=>{
 
         const bucket = await getStorageBucket();
-        const fileObject = bucket.file(`${path}${fileName}`);
+        const fileObject = await bucket.file(`${path}${fileName}`);
         if (await isFileExist(path, fileName)){
             await fileObject.delete();
         }

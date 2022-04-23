@@ -24,7 +24,7 @@ module.exports = {
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
         const loanTypes = await getAgentLoanTypesByUid(uid);
-        const updatedLoantTypes = await Promise.all(
+        const updatedLoanTypes = await Promise.all(
             loanTypes.map(async loanType =>{
                 const icon = await getFile(STORAGE.LOCATIONS.LOAN_ICONS, loanType.loanId)
                 loanType.icon = icon;
@@ -50,7 +50,7 @@ module.exports = {
 
         return {
             firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia,
-             contactDetails, ...updatedUser,uid,loanTypes:updatedLoantTypes
+             contactDetails, ...updatedUser,uid,loanTypes:updatedLoanTypes
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
