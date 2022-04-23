@@ -8,18 +8,35 @@ const {
 const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const knex = require("../../db/db-config");
 const {getFile} = require("../storageService");
+const { getAuth ,signInWithCustomToken, sendEmailVerification, signOut} = require("firebase/auth");
+const {initializeApp} = require("firebase/app");
 
 
 module.exports = {
     testService:async () => {
     },
     registerUser: async (data) => {
+        const firebaseConfig = {
+            apiKey: 'AIzaSyDCRnEuLjAidNPWe9y4xcdIo3C6laAH3Kw',
+            authDomain: 'loan-agents.firebaseapp.com',
+            projectId: 'loan-agents',
+            storageBucket: 'loan-agents.appspot.com',
+            messagingSenderId: '952165638578',
+            appId: '1:952165638578:web:d16e6e819a0288c07184ab'
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const {email, phone, password} = data;
         const user = await admin.auth().createUser({
             email,
             emailVerified: false,
             password
         });
+        const userToken = await admin.auth().createCustomToken(user.uid);
+        const firebaseUser = await signInWithCustomToken(auth,userToken);
+        await sendEmailVerification(firebaseUser.user);
+        await signOut(auth);
         data.userId = user.uid;
         const contactDetails = [
             {

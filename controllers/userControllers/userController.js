@@ -39,6 +39,7 @@ module.exports = {
             uid = result;
             res.status(201).send({success: 1, data: {userId: result}});
         } catch (error) {
+            console.log(error)
             await admin.auth().deleteUser(uid);
             if (error.errorInfo) {
                 const message = handleFirebase(error);

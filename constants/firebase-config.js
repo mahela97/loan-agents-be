@@ -20,4 +20,6 @@ const initializeFirebase = () => {
     });
 };
 
+
+
 module.exports = initializeFirebase;
