@@ -9,6 +9,10 @@ module.exports = {
             AGENT: "agent"
         }
     },
+    LOAN_TYPE_TABLE: {
+        NAME: "loanType",
+        LOAN_ID: "loanId"
+    },
     COMMON: {
         ARCHIVED: "archived",
         SELECT_ALL: "*",
@@ -80,7 +84,8 @@ module.exports = {
     STORAGE: {
         BUCKET_NAME: "gs://loan-agents.appspot.com",
         LOCATIONS:{
-            USERS: "loan-agents/images/users/"
+            USERS: "loan-agents/images/users/",
+            LOAN_ICONS: "loan-agents/images/loanTypes/0"
         }
     }
 
