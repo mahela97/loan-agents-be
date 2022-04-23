@@ -1,9 +1,10 @@
 const Joi = require("joi");
 const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEducation, updateAgentEducation,
-    deleteAgentEducation, addAgentContactVia, addLoanTypeToAgent
+    deleteAgentEducation, addAgentContactVia, addLoanTypeToAgent, getAllAgents
 } = require("../../services/userServices/agentService");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser, addLanguagesToUser} = require("../../services/userServices/userService");
+const {commonError} = require("../../utils/commonErrorhandler");
 module.exports = {
     getAgent: async (req, res) => {
         const schema = Joi.object({
@@ -328,6 +329,33 @@ module.exports = {
 
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
+        }
+    },
+
+    getAllAgents:async (req, res)=>{
+
+        const schema = Joi.object({
+            city: Joi.string().allow("").default(""),
+            country: Joi.string().allow("").default(""),
+            postalCode: Joi.string().allow("").default(""),
+            languages: Joi.array().items(Joi.string()).allow("").default([]),
+            loanTypes: Joi.array().items(Joi.string()).allow("").default([]),
+            }
+        );
+
+        const validate = schema.validate(req.query)
+        if (validate.error){
+            res.status(400).send(validate.error.message)
+            return
+        }
+
+        const filters = validate.value
+        try{
+
+           const result = await getAllAgents(filters);
+           res.status(200).send(result)
+        }catch(error){
+            commonError(error,res)
         }
     }
 }

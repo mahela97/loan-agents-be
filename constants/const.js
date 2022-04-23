@@ -5,6 +5,7 @@ module.exports = {
         FIRST_NAME: "firstName",
         LAST_NAME: "lastName",
         LOCATION: "location",
+        ROLE: "role",
         values: {
             AGENT: "agent"
         }

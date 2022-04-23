@@ -1,7 +1,7 @@
 const knex = require("../../db/db-config");
 const {
     USER_TABLE,
-    USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE, CONTACT_METHOD_TABLE, AGENT_LANGUAGE_TABLE,
+    USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE, CONTACT_METHOD_TABLE, AGENT_LANGUAGE_TABLE, LANGUAGE_TABLE,
 } = require("../../constants/const");
 
 
@@ -30,6 +30,23 @@ module.exports = {
         await knex(USER_CONTACT_METHOD_TABLE.NAME).insert(contactDetails).onConflict([
             USER_CONTACT_METHOD_TABLE.USER_ID,USER_CONTACT_METHOD_TABLE.CONTACT_METHOD_ID]).merge();
     },
+
+    getUsersByLanguagesDB:async (languages, type) =>{
+
+        return knex(AGENT_LANGUAGE_TABLE.NAME)
+            .select(`${AGENT_LANGUAGE_TABLE.NAME}.${AGENT_LANGUAGE_TABLE.USER_ID}`)
+            .leftJoin(USER_TABLE.NAME,`${USER_TABLE.NAME}.${USER_TABLE.USER_ID}`,
+                `${AGENT_LANGUAGE_TABLE.NAME}.${AGENT_LANGUAGE_TABLE.USER_ID}` )
+            .whereIn(AGENT_LANGUAGE_TABLE.LANGUAGE_ID, languages)
+            .where(USER_TABLE.ROLE, type).distinct()
+    },
+
+    getAllUsersByType:async (type) =>{
+
+        return knex(USER_TABLE.NAME)
+            .select(USER_TABLE.USER_ID)
+            .where(USER_TABLE.ROLE, type)
+    }
 
 
 };

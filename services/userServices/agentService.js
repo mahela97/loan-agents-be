@@ -1,14 +1,15 @@
-const {getDbUserById, updateUserDetailsById} = require("../../repositories/userRepositories/userRepository");
+const {getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType} = require("../../repositories/userRepositories/userRepository");
 const {getLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
-const {getAgentDetailsByUid, updateAgentDetails} = require("../../repositories/userRepositories/agentRepository");
+const {getAgentDetailsByUid, updateAgentDetails, getAgentsByLoanTypesDB} = require("../../repositories/userRepositories/agentRepository");
 const {
     getSocialMediaByUid, getContactDetailsByUid
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
 const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
 const {getFile} = require("../storageService");
-const {STORAGE} = require("../../constants/const");
+const {STORAGE, USER_TABLE} = require("../../constants/const");
 const {deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid} = require("../../repositories/publicRepository/loanRepository");
+const lodash = require("lodash");
 
 module.exports = {
     getAgentDetails: async (uid) => {
@@ -92,5 +93,30 @@ module.exports = {
             await addLoanTypesToDb(dbLoanTypes, transaction)
         }
         await transaction.commit();
+    },
+
+    getAllAgents:async ({languages, loanTypes, city, country, postalCode})=>{
+
+        const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
+        const filterList = [allAgents.map(agent=>agent.userId)];
+
+        const languageAgents = await getUsersByLanguagesDB(languages, USER_TABLE.values.AGENT);
+        if (languageAgents.length>0){
+            filterList.push(languageAgents.map(languageAgent=>languageAgent.userId))
+        }
+
+        const loanAgents = await getAgentsByLoanTypesDB(loanTypes);
+        if (loanAgents.length>0){
+            filterList.push(loanAgents.map(loanAgent=>loanAgent.userId))
+        }
+
+        const filteredAgentIds = lodash.intersection(...filterList);
+
+        const filtersAgents =await Promise.all(
+            filteredAgentIds.map(async(id)=>{
+                return module.exports.getAgentDetails(id);
+            })
+        )
+        return filtersAgents
     }
 }

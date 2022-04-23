@@ -3,11 +3,12 @@ const router = require("express").Router();
 const {isAgent} = require("../middlewares/isAgent");
 const {getAgent, editAgentDetails, addAgentSocialMedia, addAgentContactDetail,
     addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation, addAgentContactVia,
-    updateAgentLoanTypes
+    updateAgentLoanTypes, getAllAgents
 } = require("../controllers/userControllers/agentController");
 
 // router.use(isAgent);
 router.get("/", getAgent)
+router.get("/all", getAllAgents);
 router.patch("/:uid/basicDetails", editAgentDetails);
 router.post("/:uid/socialMedia", addAgentSocialMedia);
 router.post("/:uid/contactDetail",addAgentContactDetail)
