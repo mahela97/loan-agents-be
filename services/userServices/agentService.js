@@ -71,5 +71,16 @@ module.exports = {
 
     addAgentContactVia:async (uid, details) =>{
         return updateAgentDetails(uid, details, null)
+    },
+
+    addLoanTypeToAgent:async (uid, loans)=>{
+        const dbLoanTypes = loans.map(loan=>{
+            return {userId:uid,loanId:loan}});
+        const transaction = await knex.transaction();
+        await deleteLoanTypeByUid(uid, transaction);
+        if (dbLoanType.length>0) {
+            await addLoanTypesToDb(dbLoanTypes, transaction)
+        }
+        await transaction.commit();
     }
 }

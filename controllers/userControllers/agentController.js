@@ -300,4 +300,34 @@ module.exports = {
         }
 
     },
+
+    updateAgentLoanTypes:async (req,res) =>{
+
+        const schema = Joi.array().items(Joi.string()).allow("");
+        const validate = schema.validate(req.body);
+        if (validate.error) {
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const pathSchema = Joi.object({
+            uid: Joi.string().required()
+        });
+        const pathValidate = pathSchema.validate(req.params, {abortEarly: false})
+        if (pathValidate.error) {
+            res.status(400).send({message: pathValidate.error.details})
+            return;
+        }
+
+        const body = validate.value;
+        const {uid} = pathValidate.value;
+        try {
+            await addAgentLoanTypes(uid,body);
+            res.status(201).send({success: 1});
+        } catch (error) {
+
+            if (error.message) res.status(400).send(error.message);
+            else if (error) res.status(400).send(error);
+        }
+    }
 }

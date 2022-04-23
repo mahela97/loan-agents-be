@@ -8,5 +8,24 @@ module.exports = {
 
     addLoanTypeDB:async (data)=>{
         return knex(LOAN_TYPE_TABLE.NAME).insert(data, LOAN_TYPE_TABLE.LOAN_ID)
+    },
+
+    addLoanTypToDBUser:async (loans,transaction)=>{
+        if (transaction){
+            await knex(LOAN_TYPE_TABLE.NAME).transacting(transaction).insert(loans);
+            return;
+        }
+        await knex(LOAN_TYPE_TABLE.NAME).insert(loans);
+    },
+
+    deleteLoanTypeByUid:async (uid, transaction)=>{
+        if (transaction){
+            await knex(LOAN_TYPE_TABLE.NAME)
+                .transacting(transaction)
+                .delete().where(LOAN_TYPE_TABLE.USER_ID,uid)
+            return;
+        }
+        await knex(LOAN_TYPE_TABLE.NAME)
+            .delete().where(LOAN_TYPE_TABLE.USER_ID,uid)
     }
 }
