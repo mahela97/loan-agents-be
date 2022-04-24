@@ -7,7 +7,7 @@ const {
 const knex = require("../../db/db-config");
 const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
 const {getFile} = require("../storageService");
-const {STORAGE, USER_TABLE} = require("../../constants/const");
+const {STORAGE, USER_TABLE, COMMON} = require("../../constants/const");
 const {deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid} = require("../../repositories/publicRepository/loanRepository");
 const lodash = require("lodash");
 
@@ -20,7 +20,7 @@ module.exports = {
 
         let updatedUser = {};
 
-        const {firstName, lastName, city, country, postalCode} = userDetails;
+        const {firstName, lastName, city, country, postalCode, createdAt} = userDetails;
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
@@ -50,7 +50,7 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia,
+            firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia, createdAt,
              contactDetails, ...updatedUser,uid,loanTypes:updatedLoanTypes
         }
 
@@ -147,6 +147,18 @@ module.exports = {
                 return module.exports.getAgentDetails(id);
             })
         )
+
+        if (sortBy === COMMON.ASC){
+            return filtersAgents.sort(function(x, y){
+                return y.createdAt - x.createdAt
+
+            })
+        }else if (sortBy === COMMON.DESC){
+            return filtersAgents.sort(function(x, y){
+                return x.createdAt - y.createdAt
+
+            })
+        }
         return filtersAgents
     }
 }

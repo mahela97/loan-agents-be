@@ -97,6 +97,5 @@ module.exports = {
             USERS: "loan-agents/images/users/",
             LOAN_ICONS: "loan-agents/images/loanTypes/"
         }
-    }
-
+    },
 };
