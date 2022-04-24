@@ -95,85 +95,93 @@ module.exports = {
         await transaction.commit();
     },
 
-    getAllAgents:async ({languages, loanTypes, city, country, postalCode, status, sortBy, queryString})=>{
+    getAllAgents:async ({languages, loanTypes, city, country, postalCode, status, sortBy, queryString, page, limit})=> {
 
         const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
-        const filterList = [allAgents.map(agent=>agent.userId)];
+        const filterList = [allAgents.map(agent => agent.userId)];
 
 
-
-        if (languages.length>0){
+        if (languages.length > 0) {
 
             const languageAgents = await getUsersByLanguagesDB(languages, USER_TABLE.values.AGENT);
-            if (languageAgents.length>0){
-                filterList.push(languageAgents.map(languageAgent=>languageAgent.userId))
-            }
-            else{
+            if (languageAgents.length > 0) {
+                filterList.push(languageAgents.map(languageAgent => languageAgent.userId))
+            } else {
                 return []
             }
         }
 
-        if (loanTypes.length>0){
+        if (loanTypes.length > 0) {
 
             const loanAgents = await getAgentsByLoanTypesDB(loanTypes);
-            if (loanAgents.length>0){
-                filterList.push(loanAgents.map(loanAgent=>loanAgent.userId))
-            }
-            else{
+            if (loanAgents.length > 0) {
+                filterList.push(loanAgents.map(loanAgent => loanAgent.userId))
+            } else {
                 return []
             }
 
         }
 
-        if (city){
+        if (city) {
 
             const cityAgents = await getUsersByFieldRole(USER_TABLE.CITY, city, USER_TABLE.values.AGENT);
-            if (cityAgents.length>0){
-                filterList.push(cityAgents.map(cityAgent=>cityAgent.userId));
-            }else{
+            if (cityAgents.length > 0) {
+                filterList.push(cityAgents.map(cityAgent => cityAgent.userId));
+            } else {
                 return []
             }
         }
 
-        if (country){
+        if (country) {
 
             const countryAgents = await getUsersByFieldRole(USER_TABLE.COUNTRY, country, USER_TABLE.values.AGENT);
-            if (countryAgents.length>0){
-                filterList.push(countryAgents.map(countryAgent=>countryAgent.userId));
-            }else{
+            if (countryAgents.length > 0) {
+                filterList.push(countryAgents.map(countryAgent => countryAgent.userId));
+            } else {
                 return []
             }
         }
 
-        if (postalCode){
+        if (postalCode) {
 
             const postalCodeAgents = await getUsersByFieldRole(USER_TABLE.POSTAL_CODE, postalCode, USER_TABLE.values.AGENT);
-            if (postalCodeAgents.length>0){
-                filterList.push(postalCodeAgents.map(postalCodeAgent=>postalCodeAgent.userId));
-            }else{
+            if (postalCodeAgents.length > 0) {
+                filterList.push(postalCodeAgents.map(postalCodeAgent => postalCodeAgent.userId));
+            } else {
                 return []
             }
         }
 
         const filteredAgentIds = lodash.intersection(...filterList);
 
-        const filtersAgents =await Promise.all(
-            filteredAgentIds.map(async(id)=>{
+        const filtersAgents = await Promise.all(
+            filteredAgentIds.map(async (id) => {
                 return module.exports.getAgentDetails(id);
             })
         )
 
-        if (sortBy === COMMON.DESC){
-            return filtersAgents.sort(function(x, y){
+        if (sortBy === COMMON.DESC) {
+            filtersAgents.sort(function (x, y) {
                 return y.createdAt - x.createdAt
 
             })
-        }else if (sortBy === COMMON.ASC){
-            return filtersAgents.sort(function(x, y){
+        } else if (sortBy === COMMON.ASC) {
+            filtersAgents.sort(function (x, y) {
                 return x.createdAt - y.createdAt
 
             })
         }
-        return filtersAgents
+
+        if (limit === -1) {
+            return {agents: filtersAgents, total: filtersAgents.length, numOfPages: filtersAgents % limit}
+        }
+
+        const start = (limit * page) - limit;
+        let end = (limit * page) - limit;
+        if (end > filtersAgents.length) {
+            end = filtersAgents.length;
+        }
+        const updatedAgents = filtersAgents.slice(start, end);
+        return {agents: updatedAgents, total: filtersAgents.length, numOfPages: filtersAgents % limit}
     }
 }

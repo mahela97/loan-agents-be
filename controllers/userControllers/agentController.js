@@ -342,7 +342,9 @@ module.exports = {
             loanTypes: Joi.array().items(Joi.string()).allow("").default([]),
             status: Joi.string().allow("").default(""),
             sortBy: Joi.string().allow("").default(""),
-            queryString: Joi.string().allow("").default("")
+            queryString: Joi.string().allow("").default(""),
+            limit: Joi.number().default(-1),
+            page: Joi.number().default(1)
             }
         );
 
@@ -355,8 +357,8 @@ module.exports = {
         const filters = validate.value
         try{
 
-           const result = await getAllAgents(filters);
-           res.status(200).send(result)
+           const {agents, total, numOfPages } = await getAllAgents(filters);
+           res.status(200).send({total, numOfPages, agents})
         }catch(error){
             commonError(error,res)
         }
