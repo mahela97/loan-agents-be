@@ -148,12 +148,12 @@ module.exports = {
             })
         )
 
-        if (sortBy === COMMON.ASC){
+        if (sortBy === COMMON.DESC){
             return filtersAgents.sort(function(x, y){
                 return y.createdAt - x.createdAt
 
             })
-        }else if (sortBy === COMMON.DESC){
+        }else if (sortBy === COMMON.ASC){
             return filtersAgents.sort(function(x, y){
                 return x.createdAt - y.createdAt
 
