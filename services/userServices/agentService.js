@@ -100,14 +100,29 @@ module.exports = {
         const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
         const filterList = [allAgents.map(agent=>agent.userId)];
 
-        const languageAgents = await getUsersByLanguagesDB(languages, USER_TABLE.values.AGENT);
-        if (languageAgents.length>0){
-            filterList.push(languageAgents.map(languageAgent=>languageAgent.userId))
+
+
+        if (languages.length>0){
+
+            const languageAgents = await getUsersByLanguagesDB(languages, USER_TABLE.values.AGENT);
+            if (languageAgents.length>0){
+                filterList.push(languageAgents.map(languageAgent=>languageAgent.userId))
+            }
+            else{
+                return []
+            }
         }
 
-        const loanAgents = await getAgentsByLoanTypesDB(loanTypes);
-        if (loanAgents.length>0){
-            filterList.push(loanAgents.map(loanAgent=>loanAgent.userId))
+        if (loanTypes.length>0){
+
+            const loanAgents = await getAgentsByLoanTypesDB(loanTypes);
+            if (loanAgents.length>0){
+                filterList.push(loanAgents.map(loanAgent=>loanAgent.userId))
+            }
+            else{
+                return []
+            }
+
         }
 
         if (city){
