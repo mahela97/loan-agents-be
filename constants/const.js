@@ -4,7 +4,9 @@ module.exports = {
         USER_ID: "userId",
         FIRST_NAME: "firstName",
         LAST_NAME: "lastName",
-        LOCATION: "location",
+        CITY: "city",
+        COUNTRY: "country",
+        POSTAL_CODE: "postalCode",
         ROLE: "role",
         values: {
             AGENT: "agent"

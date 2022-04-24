@@ -46,6 +46,14 @@ module.exports = {
         return knex(USER_TABLE.NAME)
             .select(USER_TABLE.USER_ID)
             .where(USER_TABLE.ROLE, type)
+    },
+
+    getUsersByFieldRole:async (field, fieldValue, role)=>{
+
+        return knex(USER_TABLE.NAME)
+            .select(USER_TABLE.USER_ID)
+            .where(field, fieldValue)
+            .where(USER_TABLE.ROLE, role)
     }
 
 

@@ -1,4 +1,4 @@
-const {getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType} = require("../../repositories/userRepositories/userRepository");
+const {getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole} = require("../../repositories/userRepositories/userRepository");
 const {getLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const {getAgentDetailsByUid, updateAgentDetails, getAgentsByLoanTypesDB} = require("../../repositories/userRepositories/agentRepository");
 const {
@@ -95,7 +95,7 @@ module.exports = {
         await transaction.commit();
     },
 
-    getAllAgents:async ({languages, loanTypes, city, country, postalCode})=>{
+    getAllAgents:async ({languages, loanTypes, city, country, postalCode, status, sortBy, queryString})=>{
 
         const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
         const filterList = [allAgents.map(agent=>agent.userId)];
@@ -110,6 +110,35 @@ module.exports = {
             filterList.push(loanAgents.map(loanAgent=>loanAgent.userId))
         }
 
+        if (city){
+
+            const cityAgents = await getUsersByFieldRole(USER_TABLE.CITY, city, USER_TABLE.values.AGENT);
+            if (cityAgents.length>0){
+                filterList.push(cityAgents.map(cityAgent=>cityAgent.userId));
+            }else{
+                return []
+            }
+        }
+
+        if (country){
+
+            const countryAgents = await getUsersByFieldRole(USER_TABLE.COUNTRY, country, USER_TABLE.values.AGENT);
+            if (countryAgents.length>0){
+                filterList.push(countryAgents.map(countryAgent=>countryAgent.userId));
+            }else{
+                return []
+            }
+        }
+
+        if (postalCode){
+
+            const postalCodeAgents = await getUsersByFieldRole(USER_TABLE.POSTAL_CODE, postalCode, USER_TABLE.values.AGENT);
+            if (postalCodeAgents.length>0){
+                filterList.push(postalCodeAgents.map(postalCodeAgent=>postalCodeAgent.userId));
+            }else{
+                return []
+            }
+        }
 
         const filteredAgentIds = lodash.intersection(...filterList);
 
