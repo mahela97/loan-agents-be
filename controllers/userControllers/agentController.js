@@ -340,6 +340,9 @@ module.exports = {
             postalCode: Joi.string().allow("").default(""),
             languages: Joi.array().items(Joi.string()).allow("").default([]),
             loanTypes: Joi.array().items(Joi.string()).allow("").default([]),
+            status: Joi.string().allow("").default(""),
+            sortBy: Joi.string().allow("").default(""),
+            queryString: Joi.string().allow("").default("")
             }
         );
 

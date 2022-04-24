@@ -110,6 +110,7 @@ module.exports = {
             filterList.push(loanAgents.map(loanAgent=>loanAgent.userId))
         }
 
+
         const filteredAgentIds = lodash.intersection(...filterList);
 
         const filtersAgents =await Promise.all(
