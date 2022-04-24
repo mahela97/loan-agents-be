@@ -1,14 +1,22 @@
-const {getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole} = require("../../repositories/userRepositories/userRepository");
+const {
+    getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole
+} = require("../../repositories/userRepositories/userRepository");
 const {getLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
-const {getAgentDetailsByUid, updateAgentDetails, getAgentsByLoanTypesDB} = require("../../repositories/userRepositories/agentRepository");
+const {
+    getAgentDetailsByUid, updateAgentDetails, getAgentsByLoanTypesDB
+} = require("../../repositories/userRepositories/agentRepository");
 const {
     getSocialMediaByUid, getContactDetailsByUid
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
-const {addEducationToDB, updateEducationInDB, deleteEducationInDB} = require("../../repositories/qualificationRepositories/educationRepository");
+const {
+    addEducationToDB, updateEducationInDB, deleteEducationInDB
+} = require("../../repositories/qualificationRepositories/educationRepository");
 const {getFile} = require("../storageService");
 const {STORAGE, USER_TABLE, COMMON} = require("../../constants/const");
-const {deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid} = require("../../repositories/publicRepository/loanRepository");
+const {
+    deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid
+} = require("../../repositories/publicRepository/loanRepository");
 const lodash = require("lodash");
 
 module.exports = {
@@ -21,17 +29,15 @@ module.exports = {
         let updatedUser = {};
 
         const {firstName, lastName, city, country, postalCode, createdAt} = userDetails;
-        const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
+        const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS, uid);
         const languages = await getLanguagesByUid(uid);
         const agentDetails = await getAgentDetailsByUid(uid);
         const loanTypes = await getAgentLoanTypesByUid(uid);
-        const updatedLoanTypes = await Promise.all(
-            loanTypes.map(async loanType =>{
-                const icon = await getFile(STORAGE.LOCATIONS.LOAN_ICONS, loanType.loanId)
-                loanType.icon = icon;
-                return loanType;
-            })
-        );
+        const updatedLoanTypes = await Promise.all(loanTypes.map(async loanType => {
+            const icon = await getFile(STORAGE.LOCATIONS.LOAN_ICONS, loanType.loanId)
+            loanType.icon = icon;
+            return loanType;
+        }));
 
         if (agentDetails[0]) {
             updatedUser = {...agentDetails[0]};
@@ -50,52 +56,65 @@ module.exports = {
         });
 
         return {
-            firstName, lastName, profilePhoto, city, country, postalCode, languages, socialMedia, createdAt,
-             contactDetails, ...updatedUser,uid,loanTypes:updatedLoanTypes
+            firstName,
+            lastName,
+            profilePhoto,
+            city,
+            country,
+            postalCode,
+            languages,
+            socialMedia,
+            createdAt,
+            contactDetails, ...updatedUser,
+            uid,
+            loanTypes: updatedLoanTypes
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
         const transaction = await knex.transaction();
         const {firstName, lastName, country, city, postalCode} = details;
         const {statement} = details;
-        await updateUserDetailsById(uid,{firstName,lastName,country, city, postalCode},transaction);
-        await updateAgentDetails(uid,{statement},transaction);
+        await updateUserDetailsById(uid, {firstName, lastName, country, city, postalCode}, transaction);
+        await updateAgentDetails(uid, {statement}, transaction);
         await transaction.commit();
     },
 
-    addAgentIntroduction:async (uid,introduction) =>{
-        return updateAgentDetails(uid,{introduction}, null);
+    addAgentIntroduction: async (uid, introduction) => {
+        return updateAgentDetails(uid, {introduction}, null);
     },
 
-    addAgentEducation:async (uid, educationDetails) =>{
+    addAgentEducation: async (uid, educationDetails) => {
         educationDetails.userId = uid;
         return addEducationToDB(educationDetails);
     },
 
-    updateAgentEducation:async (eid, educationDetails) =>{
+    updateAgentEducation: async (eid, educationDetails) => {
         return updateEducationInDB(eid, educationDetails);
     },
 
-    deleteAgentEducation:async (eid) =>{
+    deleteAgentEducation: async (eid) => {
         return deleteEducationInDB(eid);
     },
 
-    addAgentContactVia:async (uid, details) =>{
+    addAgentContactVia: async (uid, details) => {
         return updateAgentDetails(uid, details, null)
     },
 
-    addLoanTypeToAgent:async (uid, loans)=>{
-        const dbLoanTypes = loans.map(loan=>{
-            return {userId:uid,loanId:loan}});
+    addLoanTypeToAgent: async (uid, loans) => {
+        const dbLoanTypes = loans.map(loan => {
+            return {userId: uid, loanId: loan}
+        });
         const transaction = await knex.transaction();
         await deleteLoanTypeByUid(uid, transaction);
-        if (dbLoanTypes.length>0) {
+        if (dbLoanTypes.length > 0) {
             await addLoanTypesToDb(dbLoanTypes, transaction)
         }
         await transaction.commit();
     },
 
-    getAllAgents:async ({languages, loanTypes, city, country, postalCode, status, sortBy, queryString, page, limit})=> {
+    getAllAgents: async ({
+                             languages, loanTypes, city, country, postalCode, status, sortBy, queryString,
+                         }) => {
 
         const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
         const filterList = [allAgents.map(agent => agent.userId)];
@@ -154,11 +173,9 @@ module.exports = {
 
         const filteredAgentIds = lodash.intersection(...filterList);
 
-        const filtersAgents = await Promise.all(
-            filteredAgentIds.map(async (id) => {
-                return module.exports.getAgentDetails(id);
-            })
-        )
+        const filtersAgents = await Promise.all(filteredAgentIds.map(async (id) => {
+            return module.exports.getAgentDetails(id);
+        }))
 
         if (sortBy === COMMON.DESC) {
             filtersAgents.sort(function (x, y) {
@@ -172,16 +189,6 @@ module.exports = {
             })
         }
 
-        if (limit === -1) {
-            return {agents: filtersAgents, total: filtersAgents.length, numOfPages: filtersAgents % limit}
-        }
-
-        const start = (limit * page) - limit;
-        let end = (limit * page) - limit;
-        if (end > filtersAgents.length) {
-            end = filtersAgents.length;
-        }
-        const updatedAgents = filtersAgents.slice(start, end);
-        return {agents: updatedAgents, total: filtersAgents.length, numOfPages: filtersAgents % limit}
+        return filtersAgents
     }
 }

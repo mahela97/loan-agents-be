@@ -357,8 +357,21 @@ module.exports = {
         const filters = validate.value
         try{
 
-           const {agents, total, numOfPages } = await getAllAgents(filters);
-           res.status(200).send({total, numOfPages, agents})
+           const agents = await getAllAgents(filters);
+            const start = (filters.limit * filters.page) - filters.limit;
+            let end = (filters.limit * filters.page) - 1;
+            if (end > agents.length) {
+                end = agents.length;
+            }
+
+            const total = agents.length;
+            const numOfPages = Math.ceil(total / filters.limit);
+
+            if (filters.limit === -1){
+                res.status(200).send({total, numOfPages, agents: agents})
+                return;
+            }
+           res.status(200).send({total, numOfPages, agents: agents.slice(start, end)})
         }catch(error){
             commonError(error,res)
         }
