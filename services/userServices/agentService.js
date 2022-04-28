@@ -1,5 +1,5 @@
 const {
-    getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole
+    getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole, getUsersByQuery
 } = require("../../repositories/userRepositories/userRepository");
 const {getLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const {
@@ -166,6 +166,16 @@ module.exports = {
             const postalCodeAgents = await getUsersByFieldRole(USER_TABLE.POSTAL_CODE, postalCode, USER_TABLE.values.AGENT);
             if (postalCodeAgents.length > 0) {
                 filterList.push(postalCodeAgents.map(postalCodeAgent => postalCodeAgent.userId));
+            } else {
+                return []
+            }
+        }
+
+        if (queryString) {
+
+            const queryAgents = await getUsersByQuery(queryString);
+            if (queryAgents.length > 0) {
+                filterList.push(queryAgents.map(queryAgent => queryAgent.userId));
             } else {
                 return []
             }

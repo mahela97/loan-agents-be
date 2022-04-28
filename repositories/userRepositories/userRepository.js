@@ -52,8 +52,22 @@ module.exports = {
 
         return knex(USER_TABLE.NAME)
             .select(USER_TABLE.USER_ID)
-            .whereILike(field, `%${fieldValue}%`)
+            .whereILike(field, `${fieldValue}%`)
             .where(USER_TABLE.ROLE, role)
+    },
+
+    getUsersByQuery:async (query)=>{
+
+        return knex(USER_TABLE.NAME)
+            .select(USER_TABLE.USER_ID)
+            .orWhereILike(USER_TABLE.FIRST_NAME, `${query}%`)
+            .orWhereILike(USER_TABLE.LAST_NAME, `${query}%`)
+            .orWhereILike(USER_TABLE.CITY, `${query}%`)
+            .orWhereILike(USER_TABLE.COUNTRY, `${query}%`)
+            .orWhereILike(USER_TABLE.POSTAL_CODE, `${query}%`)
+            .orWhereILike(USER_TABLE.FIRST_NAME, `${query}%`)
+
+
     }
 
 
