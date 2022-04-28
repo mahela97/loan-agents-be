@@ -52,7 +52,7 @@ module.exports = {
 
         return knex(USER_TABLE.NAME)
             .select(USER_TABLE.USER_ID)
-            .whereLike(field, fieldValue)
+            .whereILike(field, `%${fieldValue}%`)
             .where(USER_TABLE.ROLE, role)
     }
 
