@@ -5,6 +5,9 @@ const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEdu
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser, addLanguagesToUser} = require("../../services/userServices/userService");
 const {commonError} = require("../../utils/commonErrorhandler");
+const {createSubscriptionFoUser} = require("../../services/paymentService");
+const {PAYMENT_PLANS} = require("../../constants/const");
+
 module.exports = {
     getAgent: async (req, res) => {
         const schema = Joi.object({
@@ -374,6 +377,35 @@ module.exports = {
            res.status(200).send({total, numOfPages, agents: agents.slice(start, end)})
         }catch(error){
             commonError(error,res)
+        }
+    },
+
+    createAgentSubscription:async (req,res) =>{
+
+        const schema = Joi.object({
+            subscriptionType: Joi.string().required().valid(...[
+                PAYMENT_PLANS.MONTHLY.NAME,
+                PAYMENT_PLANS.YEARLY.NAME,
+                PAYMENT_PLANS.PAY_AS_YOU_GO.NAME
+            ]),
+            cancel:Joi.string(),
+            success:Joi.string(),
+            uid:Joi.string()
+        })
+
+        const validate = schema.validate(req.query)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const { subscriptionType, cancel,success,uid} = validate.value
+
+        try{
+
+            const {url} = await createSubscriptionFoUser(uid, subscriptionType, success, cancel);
+            res.status(200).send({success:1, url})
+        }catch (error){
+            commonError(error)
         }
     }
 }
