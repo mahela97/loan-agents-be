@@ -28,8 +28,6 @@ module.exports = {
 
     getContactDetailsByNameUid:async (uid, field)=>{
 
-        console.log(uid, field)
-
         return  (await knex(USER_CONTACT_METHOD_TABLE.NAME)
                 .select(USER_CONTACT_METHOD_TABLE.VALUE)
                 .where(CONTACT_METHOD_TABLE.CONTACT_METHOD_ID, field)

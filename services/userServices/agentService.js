@@ -56,28 +56,7 @@ module.exports = {
             contactDetails[key] = contactM.value
         });
 
-        let subscriptionType;
-
-        const subscriptionId = (await getCurrentPlan(uid))
-        if (subscriptionId.data.length > 0 ){
-
-            const currentPlan = subscriptionId.data[0].items.data[0].plan.product;
-
-            switch (currentPlan){
-                case PAYMENT_PLANS.MONTHLY.PROD_ID:
-                    subscriptionType = PAYMENT_PLANS.MONTHLY.NAME;
-                    break;
-                case PAYMENT_PLANS.YEARLY.PROD_ID:
-                    subscriptionType = PAYMENT_PLANS.YEARLY.NAME;
-                    break;
-                case PAYMENT_PLANS.PAY_AS_YOU_GO.PROD_ID:
-                    subscriptionType = PAYMENT_PLANS.PAY_AS_YOU_GO.NAME;
-                    break;
-                default:
-                    subscriptionType = PAYMENT_PLANS.FREE.NAME
-                    break;
-            }
-        }
+        const subscriptionType = (await getCurrentPlan(uid))
 
         return {
             firstName,
@@ -138,12 +117,19 @@ module.exports = {
     },
 
     getAllAgents: async ({
-                             languages, loanTypes, city, country, postalCode, status, sortBy, queryString,
+                             languages, loanTypes, city, country, postalCode, status, sortBy, queryString, limit
                          }) => {
 
         const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
         const filterList = [allAgents.map(agent => agent.userId)];
 
+        if (limit === -1){
+
+             const agents = (await Promise.all(filterList[0].map(async (id) => {
+                return module.exports.getAgentDetails(id);
+            })))
+            return agents
+        }
 
         if (languages.length > 0) {
 

@@ -361,6 +361,7 @@ module.exports = {
         try{
 
            const agents = await getAllAgents(filters);
+
             const start = (filters.limit * filters.page) - filters.limit;
             let end = (filters.limit * filters.page);
             if (end > agents.length) {
