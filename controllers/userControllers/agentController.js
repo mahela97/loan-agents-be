@@ -5,7 +5,7 @@ const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEdu
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser, addLanguagesToUser} = require("../../services/userServices/userService");
 const {commonError} = require("../../utils/commonErrorhandler");
-const {createSubscriptionFoUser} = require("../../services/paymentService");
+const {createSubscriptionFoUser, getPortalSession} = require("../../services/paymentService");
 const {PAYMENT_PLANS} = require("../../constants/const");
 
 module.exports = {
@@ -404,6 +404,29 @@ module.exports = {
 
             const {url} = await createSubscriptionFoUser(uid, subscriptionType, success, cancel);
             res.status(200).send({success:1, url})
+        }catch (error){
+            commonError(error)
+        }
+    },
+
+    getPaymentPortal:async (req, res)=>{
+
+        const schema = Joi.object({
+            url:Joi.string(),
+            uid:Joi.string()
+        })
+
+        const validate = schema.validate(req.query)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const { url,uid} = validate.value
+
+        try{
+
+            const portalUrl =( await getPortalSession(uid, url)).url;
+            res.status(200).send({success:1, url:portalUrl})
         }catch (error){
             commonError(error)
         }

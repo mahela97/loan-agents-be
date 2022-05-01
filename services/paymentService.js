@@ -57,5 +57,22 @@ module.exports = {
         })).id;
     },
 
+    getCurrentPlan: async (uid)=>{
 
+        const {customerId} = (await getAgentField(uid, [AGENT_DETAIL_TABLE.CUSTOMER_ID]));
+        return ( await stripe.subscriptions.list({
+            customer:customerId,
+        }))
+    },
+
+    getPortalSession:async (uid, url)=>{
+
+        const {customerId} = (await getAgentField(uid, [AGENT_DETAIL_TABLE.CUSTOMER_ID]))
+        return (
+            await stripe.billingPortal.sessions.create({
+                customer: customerId,
+                return_url:url,
+            })
+        )
+    }
 }

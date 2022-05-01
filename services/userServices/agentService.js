@@ -18,6 +18,7 @@ const {
     deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid
 } = require("../../repositories/publicRepository/loanRepository");
 const lodash = require("lodash");
+const {getCurrentPlan} = require("../paymentService");
 
 module.exports = {
     getAgentDetails: async (uid) => {
@@ -55,6 +56,7 @@ module.exports = {
             contactDetails[key] = contactM.value
         });
 
+        const subscriptionId =await getCurrentPlan(uid)
         return {
             firstName,
             lastName,
@@ -67,7 +69,8 @@ module.exports = {
             createdAt,
             contactDetails, ...updatedUser,
             uid,
-            loanTypes: updatedLoanTypes
+            loanTypes: updatedLoanTypes,
+            subscriptionId
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
