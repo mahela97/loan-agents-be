@@ -7,12 +7,12 @@ const {
 
 
 module.exports = {
-    createDbUser: async (data, contactDetails) => {
-        const transaction = await knex.transaction();
+    createDbUser: async (data, contactDetails, customerId, transaction) => {
+
         await knex(USER_TABLE.NAME).transacting(transaction).insert(data);
         await knex(USER_CONTACT_METHOD_TABLE.NAME).transacting(transaction).insert(contactDetails);
         if (data.role === USER_TABLE.values.AGENT){
-            await knex(AGENT_DETAIL_TABLE.NAME).transacting(transaction).insert({userId:data.userId})
+            await knex(AGENT_DETAIL_TABLE.NAME).transacting(transaction).insert({userId:data.userId, customerId})
         }
         transaction.commit();
 
@@ -68,6 +68,13 @@ module.exports = {
             .orWhereILike(USER_TABLE.FIRST_NAME, `${query}%`)
 
 
+    },
+
+    getUserFieldsUid:async (uid, fields)=>{
+
+        return (await knex(USER_TABLE.NAME)
+            .select(...fields)
+            .where(USER_TABLE.USER_ID, uid))[0]
     }
 
 

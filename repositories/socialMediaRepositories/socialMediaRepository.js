@@ -24,5 +24,16 @@ module.exports = {
             .select(USER_CONTACT_METHOD_TABLE.VALUE)
             .where(USER_CONTACT_METHOD_TABLE.USER_ID, uid)
             .where(CONTACT_METHOD_TABLE.TYPE, CONTACT_METHOD_TABLE.values.CONTACT);
+    },
+
+    getContactDetailsByNameUid:async (uid, field)=>{
+
+        console.log(uid, field)
+
+        return  (await knex(USER_CONTACT_METHOD_TABLE.NAME)
+                .select(USER_CONTACT_METHOD_TABLE.VALUE)
+                .where(CONTACT_METHOD_TABLE.CONTACT_METHOD_ID, field)
+                .where(USER_CONTACT_METHOD_TABLE.USER_ID, uid)
+        )[0]
     }
 }

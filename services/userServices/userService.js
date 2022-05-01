@@ -3,13 +3,15 @@ const {
 } = require("../../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
 const {
-    CONTACT_METHOD_TABLE, STORAGE,
+    CONTACT_METHOD_TABLE, STORAGE, USER_TABLE,
 } = require("../../constants/const");
 const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const knex = require("../../db/db-config");
 const {getFile} = require("../storageService");
 const { getAuth ,signInWithCustomToken, sendEmailVerification, signOut} = require("firebase/auth");
 const {initializeApp} = require("firebase/app");
+const stripe = require("../../constants/stripeConfig");
+const {createPaymentCustomer} = require("../paymentService");
 
 
 module.exports = {
@@ -54,10 +56,19 @@ module.exports = {
             },)
 
         }
+        let customerId;
+        if (data.role === USER_TABLE.values.AGENT){
+
+            customerId = await createPaymentCustomer(data.email, data.firstName, data.lastName);
+        }
+
         delete data.phone;
         delete data.email;
         delete data.password;
-        await createDbUser(data, contactDetails);
+        const transaction = await knex.transaction();
+
+
+        await createDbUser(data, contactDetails, customerId, transaction);
         return user.uid;
     },
 

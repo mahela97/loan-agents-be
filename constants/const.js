@@ -34,11 +34,15 @@ module.exports = {
         NAME: "userContactMethod",
         VALUE: "value",
         USER_ID: "userId",
-        VISIBILITY: "visibility"
+        VISIBILITY: "visibility",
+        values:{
+            EMAIL:"EMAIL"
+        }
     },
     AGENT_DETAIL_TABLE: {
         NAME: "agentDetail",
-        USER_ID: "userId"
+        USER_ID: "userId",
+        CUSTOMER_ID: "customerId"
     },
     LANGUAGE_TABLE: {
         NAME: "language",
@@ -98,4 +102,24 @@ module.exports = {
             LOAN_ICONS: "loan-agents/images/loanTypes/"
         }
     },
+    PAYMENT_PLANS: {
+        MONTHLY:{
+            PROD_ID: "prod_Lb7iang2GW1IXP",
+            NAME: "MONTHLY",
+            price: "price_1KtvT2GVuEMrgnylITuTWywH",
+
+        },
+        YEARLY:{
+            PROD_ID: "prod_Lb7ifIls2JPw4n",
+            NAME: "YEARLY",
+            price: "price_1KtvSqGVuEMrgnylM4JaGGtG"
+        },
+        PAY_AS_YOU_GO:{
+            PROD_ID: "prod_Lb7iz6q485sq1f",
+            NAME: "PAG",
+            price: "price_1KtvSdGVuEMrgnylfH1ZmT0l"
+        },
+        price: "price"
+    },
+
 };

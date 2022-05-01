@@ -7,11 +7,7 @@ const {addFile, deleteFile} = require("../../services/storageService");
 const {STORAGE} = require("../../constants/const");
 const {getAgentDetails} = require("../../services/userServices/agentService");
 module.exports = {
-    test:async (req, res) => {
-        console.log(req.file)
-        console.log("here");
-        await testService();
-    },
+
     registerUser: async (req, res) => {
         const schema = Joi.object({
             firstName: Joi.string().required(),
@@ -33,23 +29,11 @@ module.exports = {
             return;
         }
         const body = validate.value;
-        let uid;
         try {
             const result = await registerUser(body);
-            uid = result;
             res.status(201).send({success: 1, data: {userId: result}});
         } catch (error) {
-           try{
-               await admin.auth().deleteUser(uid);
-           } catch (error){
-               if (error.errorInfo) {
-                   const message = handleFirebase(error);
-                   res.status(400).send(message);
-               } else if (error.message) res.status(400).send(error.message);
-               else if (error) res.status(400).send(error);
-               return;
-           }
-
+            console.log(error)
             if (error.errorInfo) {
                 const message = handleFirebase(error);
                 res.status(400).send(message);

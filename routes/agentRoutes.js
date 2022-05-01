@@ -3,7 +3,7 @@ const router = require("express").Router();
 const {isAgent} = require("../middlewares/isAgent");
 const {getAgent, editAgentDetails, addAgentSocialMedia, addAgentContactDetail,
     addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation, addAgentContactVia,
-    updateAgentLoanTypes, getAllAgents
+    updateAgentLoanTypes, getAllAgents, createAgentSubscription
 } = require("../controllers/userControllers/agentController");
 
 // router.use(isAgent);
@@ -27,6 +27,9 @@ router.delete("/:uid/work/:wid")
 
 //loan routes
 router.patch("/:uid/loan", updateAgentLoanTypes)
+
+// payment Routes
+router.get("/subscription", createAgentSubscription)
 
 
 module.exports = router;
