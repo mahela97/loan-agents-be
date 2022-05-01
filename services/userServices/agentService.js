@@ -13,7 +13,7 @@ const {
     addEducationToDB, updateEducationInDB, deleteEducationInDB
 } = require("../../repositories/qualificationRepositories/educationRepository");
 const {getFile} = require("../storageService");
-const {STORAGE, USER_TABLE, COMMON} = require("../../constants/const");
+const {STORAGE, USER_TABLE, COMMON, PAYMENT_PLANS} = require("../../constants/const");
 const {
     deleteLoanTypeByUid, addLoanTypesToDb, getAgentLoanTypesByUid
 } = require("../../repositories/publicRepository/loanRepository");
@@ -56,7 +56,30 @@ module.exports = {
             contactDetails[key] = contactM.value
         });
 
-        const subscriptionId =await getCurrentPlan(uid)
+        let subscriptionType;
+
+        const subscriptionId = (await getCurrentPlan(uid))
+        if (subscriptionId.data.length > 0 ){
+
+            const currentPlan = subscriptionId.data[0].items.data[0].plan.product;
+
+            switch (currentPlan){
+                case PAYMENT_PLANS.MONTHLY.PROD_ID:
+                    subscriptionType = PAYMENT_PLANS.MONTHLY.NAME;
+                    break;
+                case PAYMENT_PLANS.YEARLY.PROD_ID:
+                    subscriptionType = PAYMENT_PLANS.YEARLY.NAME;
+                    break;
+                case PAYMENT_PLANS.PAY_AS_YOU_GO.PROD_ID:
+                    subscriptionType = PAYMENT_PLANS.PAY_AS_YOU_GO.NAME;
+                    break;
+                default:
+                    subscriptionType = PAYMENT_PLANS.FREE.NAME
+                    break;
+
+            }
+        }
+
         return {
             firstName,
             lastName,
@@ -70,7 +93,7 @@ module.exports = {
             contactDetails, ...updatedUser,
             uid,
             loanTypes: updatedLoanTypes,
-            subscriptionId
+            subscriptionType
         }
 
     }, editAgentBasicDetails: async (uid, details) => {

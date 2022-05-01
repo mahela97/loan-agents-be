@@ -119,6 +119,9 @@ module.exports = {
             NAME: "PAG",
             price: "price_1KtvSdGVuEMrgnylfH1ZmT0l"
         },
+        FREE:{
+            NAME:"FREE"
+        },
         price: "price"
     },
 
