@@ -76,7 +76,6 @@ module.exports = {
                 default:
                     subscriptionType = PAYMENT_PLANS.FREE.NAME
                     break;
-
             }
         }
 
