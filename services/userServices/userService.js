@@ -11,7 +11,7 @@ const {getFile} = require("../storageService");
 const { getAuth ,signInWithCustomToken, sendEmailVerification, signOut} = require("firebase/auth");
 const {initializeApp} = require("firebase/app");
 const stripe = require("../../constants/stripeConfig");
-const {createPaymentCustomer} = require("../paymentService");
+const {createPaymentCustomer, getCurrentPlan} = require("../paymentService");
 
 
 module.exports = {
@@ -78,6 +78,10 @@ module.exports = {
             return null;
         }
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
+
+        if (result.role === USER_TABLE.values.AGENT){
+             result.subscriptionType = (await getCurrentPlan(uid))
+        }
         if (profilePhoto) {
             result.profilePhoto = profilePhoto
         }
