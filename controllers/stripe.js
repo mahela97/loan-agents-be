@@ -1,5 +1,6 @@
 const stripe = require("../constants/stripeConfig");
-const {PAYMENT_PLANS} = require("../constants/const");
+const {PAYMENT_PLANS, AGENT_DETAIL_TABLE} = require("../constants/const");
+const {getAgentField} = require("../repositories/userRepositories/agentRepository");
 
 
 module.exports = {
@@ -99,49 +100,14 @@ module.exports = {
 test:async(req,res)=>{
 
         try{
-            // const configuration = await stripe.billingPortal.configurations.create({
-            //     features: {
-            //         customer_update: {
-            //             allowed_updates: ['email', 'tax_id'],
-            //             enabled: true,
-            //         },
-            //         payment_method_update:{
-            //             enabled:true,
-            //
-            //         },
-            //         subscription_update:{
-            //             default_allowed_updates:[
-            //                 "price","quantity"
-            //             ],
-            //           enabled:true,
-            //             products:[{product:PAYMENT_PLANS.YEARLY.PROD_ID, prices:[PAYMENT_PLANS.YEARLY.price]}
-            //             ,{product:PAYMENT_PLANS.MONTHLY.PROD_ID, prices:[PAYMENT_PLANS.MONTHLY.price]},
-            //                 // {product:PAYMENT_PLANS.PAY_AS_YOU_GO.PROD_ID, prices:[PAYMENT_PLANS.PAY_AS_YOU_GO.price]}
-            //             ],
-            //
-            //             // PAYMENT_PLANS.MONTHLY.PROD_ID, PAYMENT_PLANS.PAY_AS_YOU_GO.PROD_ID]
-            //         },
-            //         invoice_history: {enabled: true},
-            //     },
-            //     business_profile: {
-            //         privacy_policy_url: 'https://example.com/privacy',
-            //         terms_of_service_url: 'https://example.com/terms',
-            //     },
-            // });
-            //
-            //
-            // const session = await stripe.billingPortal.sessions.create({
-            //     customer: 'cus_LbpSGNjx4GYw0M',
-            //     return_url: 'https://example.com/account',
-            //     configuration:configuration.id
-            //
-            // });
-            const invoiceItem = await stripe.subscriptionItems.createUsageRecord(
-                'si_Lb7wUACgVFDhzx',
-                {quantity: 8}
-            );
-
-            res.status(200).send({portalSession})
+            // const {customerId} = (await getAgentField(uid, [AGENT_DETAIL_TABLE.CUSTOMER_ID]))
+            const x =  (
+                await stripe.billingPortal.sessions.create({
+                    customer: 'cus_LbpSGNjx4GYw0M',
+                    return_url: 'https://example.com/account',
+                })
+            )
+            res.status(200).send({x})
         }catch(error){
             console.log(error)
             res.status(400).send(error)
