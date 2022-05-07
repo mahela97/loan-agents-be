@@ -1,5 +1,5 @@
 const knex = require("../../db/db-config");
-const {CHAT_TABLE, COMMON, MESSAGE_TABLE, CONVERSATION_TABLE} = require("../../constants/const");
+const {CHAT_TABLE, COMMON, MESSAGE_TABLE, CONVERSATION_TABLE, PAYMENT_PLANS} = require("../../constants/const");
 module.exports = {
 
     saveMessageToDB:async (conversationId, senderId, message, transaction)=>{
@@ -72,6 +72,22 @@ module.exports = {
                 .where(CONVERSATION_TABLE.SUBSCRIPTION_TYPE, subscriptionPlan)
                 .andWhere(CONVERSATION_TABLE.PARTICIPANT_ID, uid)
         )[0].count
+    },
+
+    updateConversation:async (conversationId, updates)=>{
+
+        await knex(CONVERSATION_TABLE.NAME)
+            .update(updates)
+            .where(CONVERSATION_TABLE.CONVERSATION_ID, conversationId)
+    },
+
+    updateConversationByUid:async (uid, updates)=>{
+
+        await knex(CONVERSATION_TABLE.NAME)
+            .update(updates)
+            .where(CONVERSATION_TABLE.PARTICIPANT_ID, uid)
+            .andWhere(CONVERSATION_TABLE.SUBSCRIPTION_TYPE, null)
+
     }
 
 }

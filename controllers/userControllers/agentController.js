@@ -5,8 +5,9 @@ const {getAgentDetails, editAgentBasicDetails, addAgentIntroduction, addAgentEdu
 const handleFirebase = require("../../utils/firebaseErrorhandler");
 const { addContactDetailToUser, addLanguagesToUser} = require("../../services/userServices/userService");
 const {commonError} = require("../../utils/commonErrorhandler");
-const {createSubscriptionFoUser, getPortalSession} = require("../../services/paymentService");
+const {createSubscriptionFoUser, getPortalSession, consumePAG} = require("../../services/paymentService");
 const {PAYMENT_PLANS} = require("../../constants/const");
+const {updateConversations} = require("../../services/messageService");
 
 module.exports = {
     getAgent: async (req, res) => {
@@ -429,6 +430,50 @@ module.exports = {
             const portalUrl =( await getPortalSession(uid, url)).url;
             res.status(200).send({success:1, url:portalUrl})
         }catch (error){
+            commonError(error)
+        }
+    },
+
+    makePayment:async (req,res)=>{
+        const schema = Joi.object({
+            conversationId: Joi.string().required(),
+            uid: Joi.string().required()
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const { conversationId,uid} = validate.value
+
+        try{
+
+            await consumePAG(conversationId, uid)
+            res.status(200).send({success:1 })
+        }catch (error){
+            commonError(error)
+        }
+
+    },
+
+    successSubscription:async (req,res)=>{
+
+        const schema = Joi.object({
+            uid: Joi.string().required()
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const { uid} = validate.value
+        try{
+
+            await updateConversations(uid);
+            res.status(200).send({success:1 })
+        }catch(error){
             commonError(error)
         }
     }
