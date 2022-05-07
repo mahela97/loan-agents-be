@@ -16,14 +16,14 @@ module.exports = {
         return null;
     },
 
-    createConversation:async (user1, user2, transaction) =>{
+    createConversation:async (user1, user2, subscriptionType, isVisible, transaction) =>{
 
         const {conversationId} = (await knex(CONVERSATION_TABLE.NAME)
             .transacting(transaction)
-            .insert({[CONVERSATION_TABLE.PARTICIPANT_ID]:user1}, CONVERSATION_TABLE.CONVERSATION_ID))[0];
+            .insert({[CONVERSATION_TABLE.PARTICIPANT_ID]:user1, subscriptionType, isVisible}, CONVERSATION_TABLE.CONVERSATION_ID))[0];
         await knex(CONVERSATION_TABLE.NAME)
             .transacting(transaction)
-            .insert({[CONVERSATION_TABLE.PARTICIPANT_ID]:user2, conversationId})
+            .insert({[CONVERSATION_TABLE.PARTICIPANT_ID]:user2, subscriptionType, isVisible,conversationId})
 
         return conversationId;
     },
@@ -64,13 +64,14 @@ module.exports = {
        )
     },
 
-    getNoOfConversations:async (uid) =>{
+    getConversationsCountByPlanAndUid:async (subscriptionPlan, uid) =>{
 
         return (
             await knex(CONVERSATION_TABLE.NAME)
-                .select([])
-                .where()
-        )
+                .count(CONVERSATION_TABLE.CONVERSATION_ID)
+                .where(CONVERSATION_TABLE.SUBSCRIPTION_TYPE, subscriptionPlan)
+                .andWhere(CONVERSATION_TABLE.PARTICIPANT_ID, uid)
+        )[0].count
     }
 
 }

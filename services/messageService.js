@@ -1,7 +1,7 @@
 const {getUserByUid} = require("./userServices/userService");
 const {
     saveMessageToDB, getChatListFromDB, getConversationIdByUid, createConversation, getConversationIdsForUid,
-    getOtherParticipant, getLastMessageByConversationId, getConversationById
+    getOtherParticipant, getLastMessageByConversationId, getConversationById, getConversationsCountByPlanAndUid
 } = require("../repositories/messageRepositories/messageRepository");
 const knex = require("../db/db-config");
 const {getCurrentPlan} = require("./paymentService");
@@ -23,12 +23,28 @@ module.exports = {
         const transaction = await knex.transaction();
         let conversationId = await getConversationIdByUid(sender, receiver)
         if (!conversationId) {
-            conversationId = await createConversation(sender, receiver, transaction)
             const currentSubscription = await getCurrentPlan(receiver);
-            if (currentSubscription === PAYMENT_PLANS.FREE.NAME || currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
 
-                // const noFreeConversations =  ;
+            let noFreeConversations = 0;
+            let subscriptionType = currentSubscription;
+            let isVisible = true;
+            if (currentSubscription === PAYMENT_PLANS.FREE.NAME || currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+                noFreeConversations = await getConversationsCountByPlanAndUid(PAYMENT_PLANS.FREE.NAME, receiver);
+
+                if (noFreeConversations >= PAYMENT_PLANS.FREE.COUNT && currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+                    subscriptionType = PAYMENT_PLANS.PAY_AS_YOU_GO.NAME;
+                    isVisible = false;
+                    //send email to pay to agent
+                }else if (noFreeConversations < PAYMENT_PLANS.FREE.COUNT){
+                    subscriptionType = PAYMENT_PLANS.FREE.NAME;
+                    isVisible = true;
+                }else{
+                    subscriptionType = null;
+                    isVisible = false
+                }
             }
+
+            conversationId = await createConversation(sender, receiver, subscriptionType, isVisible, transaction)
         }
 
 

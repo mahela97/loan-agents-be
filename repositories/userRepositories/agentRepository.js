@@ -7,7 +7,8 @@ module.exports = {
 
     getAgentField: async (uid, fields) =>{
 
-        return (await knex(AGENT_DETAIL_TABLE.NAME).select(...fields).where(AGENT_DETAIL_TABLE.USER_ID, uid))[0];
+       return (await knex(AGENT_DETAIL_TABLE.NAME).select(...fields).where(AGENT_DETAIL_TABLE.USER_ID, uid))[0];
+
     },
 
     updateAgentDetails: async (uid, details, transaction) => {

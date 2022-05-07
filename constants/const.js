@@ -122,7 +122,8 @@ module.exports = {
             price: "price_1KtvSdGVuEMrgnylfH1ZmT0l"
         },
         FREE:{
-            NAME:"FREE"
+            NAME:"FREE",
+            COUNT: 2
         },
         price: "price"
     },
