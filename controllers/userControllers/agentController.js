@@ -407,7 +407,7 @@ module.exports = {
             const {url} = await createSubscriptionFoUser(uid, subscriptionType, success, cancel);
             res.status(200).send({success:1, url})
         }catch (error){
-            commonError(error)
+            commonError(error, res)
         }
     },
 
@@ -430,7 +430,7 @@ module.exports = {
             const portalUrl =( await getPortalSession(uid, url)).url;
             res.status(200).send({success:1, url:portalUrl})
         }catch (error){
-            commonError(error)
+            commonError(error, res)
         }
     },
 
