@@ -475,7 +475,7 @@ module.exports = {
             await updateConversations(uid);
             res.status(200).send({success:1 })
         }catch(error){
-            commonError(error)
+            commonError(error,res)
         }
     }
 }
