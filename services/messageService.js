@@ -117,12 +117,12 @@ module.exports = {
 
         const conversationsIds = await getConversationIdsForUid(uid);
         await Promise.all(
-            conversationsIds.map((async (id) => {
+            conversationsIds.map((async ({conversationId}) => {
                     if (currentPlan === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
-                        await updateConversationByUid(id, {subscriptionType: currentPlan})
+                        await updateConversationByUid(conversationId, {subscriptionType: currentPlan})
                     }
 
-                    await updateConversationByUid(id, {isVisible: true})
+                    await updateConversationByUid(conversationId, {isVisible: true})
                 })
             ))
 

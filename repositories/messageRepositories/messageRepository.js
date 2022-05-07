@@ -86,7 +86,7 @@ module.exports = {
         await knex(CONVERSATION_TABLE.NAME)
             .update(updates)
             .where(CONVERSATION_TABLE.CONVERSATION_ID, conversationId)
-            .andWhere(CONVERSATION_TABLE.SUBSCRIPTION_TYPE, null)
+            .whereNull(CONVERSATION_TABLE.SUBSCRIPTION_TYPE)
 
     }
 
