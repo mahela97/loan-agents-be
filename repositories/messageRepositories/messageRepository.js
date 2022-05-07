@@ -81,11 +81,11 @@ module.exports = {
             .where(CONVERSATION_TABLE.CONVERSATION_ID, conversationId)
     },
 
-    updateConversationByUid:async (uid, updates)=>{
+    updateConversationByUid:async (conversationId, updates)=>{
 
         await knex(CONVERSATION_TABLE.NAME)
             .update(updates)
-            .where(CONVERSATION_TABLE.PARTICIPANT_ID, uid)
+            .where(CONVERSATION_TABLE.CONVERSATION_ID, conversationId)
             .andWhere(CONVERSATION_TABLE.SUBSCRIPTION_TYPE, null)
 
     }
