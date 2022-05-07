@@ -1,7 +1,8 @@
 const {getUserByUid} = require("./userServices/userService");
 const {
     saveMessageToDB, getChatListFromDB, getConversationIdByUid, createConversation, getConversationIdsForUid,
-    getOtherParticipant, getLastMessageByConversationId, getConversationById, getConversationsCountByPlanAndUid
+    getOtherParticipant, getLastMessageByConversationId, getConversationById, getConversationsCountByPlanAndUid,
+    updateConversation, updateConversationByUid
 } = require("../repositories/messageRepositories/messageRepository");
 const knex = require("../db/db-config");
 const {getCurrentPlan} = require("./paymentService");
@@ -103,6 +104,18 @@ module.exports = {
                 return y.lastMessage.createdAt - x.lastMessage.createdAt
 
         })
+
+    },
+
+    updateConversations:async (uid)=>{
+
+        const currentPlan = await getCurrentPlan(uid);
+
+        if (currentPlan === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+            await updateConversationByUid(uid, {subscriptionType: currentPlan})
+        }
+
+        await updateConversationByUid(uid, {subscriptionType:currentPlan, isVisible: true})
 
     }
 }

@@ -86,32 +86,31 @@ module.exports = {
         // });
         res.status(200).send({x:session.url,session});
     },
-    // test:async (req,res)=>{
-    //     await stripe.subscriptionItems.createUsageRecord(
-    //         '{{SUBSCRIPTION_ITEM_ID}}',
-    //         {
-    //             quantity: 100,
-    //             timestamp: 1651397397,
-    //             action: 'increment',
-    //         }
-    //     );
-    //     res.status(200).send();
-    // }
-test:async(req,res)=>{
-
-        try{
-            // const {customerId} = (await getAgentField(uid, [AGENT_DETAIL_TABLE.CUSTOMER_ID]))
-            const x =  (
-                await stripe.billingPortal.sessions.create({
-                    customer: 'cus_LbpSGNjx4GYw0M',
-                    return_url: 'https://example.com/account',
-                })
-            )
-            res.status(200).send({x})
-        }catch(error){
-            console.log(error)
-            res.status(400).send(error)
-        }
-
-}
+    test:async (req,res)=>{
+        await stripe.subscriptionItems.createUsageRecord(
+            'si_LbrT6sSPW0DNYP',
+            {
+                quantity: 100,
+                action: 'increment',
+            }
+        );
+        res.status(200).send();
+    }
+// test:async(req,res)=>{
+//
+//         try{
+//             // const {customerId} = (await getAgentField(uid, [AGENT_DETAIL_TABLE.CUSTOMER_ID]))
+//             const x =  (
+//                 await stripe.billingPortal.sessions.create({
+//                     customer: 'cus_LbpSGNjx4GYw0M',
+//                     return_url: 'https://example.com/account',
+//                 })
+//             )
+//             res.status(200).send({x})
+//         }catch(error){
+//             console.log(error)
+//             res.status(400).send(error)
+//         }
+//
+// }
 }

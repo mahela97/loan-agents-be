@@ -3,6 +3,7 @@ const {getAgentField, updateAgentDetails} = require("../repositories/userReposit
 const {getContactDetailsByNameUid} = require("../repositories/socialMediaRepositories/socialMediaRepository");
 const stripe = require("../constants/stripeConfig");
 const {getUserFieldsUid} = require("../repositories/userRepositories/userRepository");
+const {updateConversation} = require("../repositories/messageRepositories/messageRepository");
 module.exports = {
 
     createSubscriptionFoUser: async (uid, subscriptionType, success, cancel) => {
@@ -97,5 +98,34 @@ module.exports = {
                 return_url: url,
             })
         )
+    },
+
+    getSubscriptionId: async (uid)=>{
+
+        const {customerId} = await getAgentField(uid, [AGENT_DETAIL_TABLE.CUSTOMER_ID])
+
+        return (await stripe.subscriptions.list({customer: customerId,
+            limit: 1,
+        })).data[0].items.data[0].id;
+    },
+
+    consumePAG: async (conversationId, uid) =>{
+
+        const currentPlan = await module.exports.getCurrentPlan(uid);
+        if (currentPlan !== PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+            throw new Error("Incorrect subscription plan")
+        }
+
+        const subscriptionItem = await module.exports.getSubscriptionId(uid);
+
+        await stripe.subscriptionItems.createUsageRecord(
+            subscriptionItem,
+            {
+                quantity: 1,
+                action: 'increment',
+            }
+        );
+
+        await updateConversation(conversationId, {isVisible:true});
     }
 }
