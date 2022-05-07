@@ -93,7 +93,9 @@ module.exports = {
     CONVERSATION_TABLE: {
         NAME: "conversation",
         PARTICIPANT_ID :"participantId",
-        CONVERSATION_ID: "conversationId"
+        CONVERSATION_ID: "conversationId",
+        SUBSCRIPTION_TYPE: "subscriptionType",
+        IS_VISIBLE: "isVisible"
     },
     STORAGE: {
         BUCKET_NAME: "gs://loan-agents.appspot.com",
@@ -112,7 +114,7 @@ module.exports = {
         YEARLY:{
             PROD_ID: "prod_Lb7ifIls2JPw4n",
             NAME: "YEARLY",
-            price: "price_1KtvSqGVuEMrgnylM4JaGGtG"
+            price: "price_1Kwo9bGVuEMrgnylV0CCTxgA"
         },
         PAY_AS_YOU_GO:{
             PROD_ID: "prod_Lb7iz6q485sq1f",

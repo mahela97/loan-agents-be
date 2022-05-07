@@ -31,7 +31,7 @@ module.exports = {
     getConversationIdsForUid:async (uid) =>{
 
         return knex(CONVERSATION_TABLE.NAME)
-            .select(CONVERSATION_TABLE.CONVERSATION_ID)
+            .select([CONVERSATION_TABLE.CONVERSATION_ID, CONVERSATION_TABLE.SUBSCRIPTION_TYPE, CONVERSATION_TABLE.IS_VISIBLE])
             .where(CONVERSATION_TABLE.PARTICIPANT_ID,uid)
 
     },
@@ -62,6 +62,15 @@ module.exports = {
                .select([MESSAGE_TABLE.MESSAGE_ID, MESSAGE_TABLE.MESSAGE, MESSAGE_TABLE.CREATED_AT, MESSAGE_TABLE.SENDER_ID,  MESSAGE_TABLE.READ])
                .where(MESSAGE_TABLE.CONVERSATION_ID, conversationId)
        )
+    },
+
+    getNoOfConversations:async (uid) =>{
+
+        return (
+            await knex(CONVERSATION_TABLE.NAME)
+                .select([])
+                .where()
+        )
     }
 
 }
