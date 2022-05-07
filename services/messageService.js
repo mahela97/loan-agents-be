@@ -4,6 +4,8 @@ const {
     getOtherParticipant, getLastMessageByConversationId, getConversationById
 } = require("../repositories/messageRepositories/messageRepository");
 const knex = require("../db/db-config");
+const {getCurrentPlan} = require("./paymentService");
+const {PAYMENT_PLANS} = require("../constants/const");
 module.exports = {
     sendMessage: async ({sender, receiver, message}) => {
         const isSenderExist = await getUserByUid(sender);
@@ -16,11 +18,19 @@ module.exports = {
             throw  new Error("Receiver does not exist in the system")
         }
 
+        // send email when new conversation
+
         const transaction = await knex.transaction();
         let conversationId = await getConversationIdByUid(sender, receiver)
         if (!conversationId) {
             conversationId = await createConversation(sender, receiver, transaction)
+            const currentSubscription = await getCurrentPlan(receiver);
+            if (currentSubscription === PAYMENT_PLANS.FREE.NAME || currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+
+                // const noFreeConversations =  ;
+            }
         }
+
 
         await saveMessageToDB(conversationId, sender, message, transaction);
         await transaction.commit();
@@ -49,7 +59,7 @@ module.exports = {
         }
 
         const conversations =  (await Promise.all(
-            conversationIds.map((async ({conversationId}) => {
+            conversationIds.map((async ({conversationId, isVisible, subscriptionType}) => {
                 const conversation = {};
                 const otherParticipantId = await getOtherParticipant(conversationId, uid);
                 const otherParticipant = await getUserByUid(otherParticipantId)
@@ -65,6 +75,9 @@ module.exports = {
                     conversation.lastMessage = lastMessage;
                 }
                 conversation.conversationId = conversationId;
+                conversation.isVisible = isVisible;
+                conversation.subscriptionType = subscriptionType;
+
                 return conversation
 
             }))
