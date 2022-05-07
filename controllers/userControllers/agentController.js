@@ -450,7 +450,8 @@ module.exports = {
         try{
 
             await consumePAG(conversationId, uid)
-            res.status(200).send({success:1 })
+
+            res.status(200).send({success:1})
         }catch (error){
             commonError(error)
         }

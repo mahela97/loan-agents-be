@@ -29,17 +29,17 @@ module.exports = {
             let noFreeConversations = 0;
             let subscriptionType = currentSubscription;
             let isVisible = true;
-            if (currentSubscription === PAYMENT_PLANS.FREE.NAME || currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+            if (currentSubscription === PAYMENT_PLANS.FREE.NAME || currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
                 noFreeConversations = await getConversationsCountByPlanAndUid(PAYMENT_PLANS.FREE.NAME, receiver);
 
-                if (noFreeConversations >= PAYMENT_PLANS.FREE.COUNT && currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
+                if (noFreeConversations >= PAYMENT_PLANS.FREE.COUNT && currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
                     subscriptionType = PAYMENT_PLANS.PAY_AS_YOU_GO.NAME;
                     isVisible = false;
                     //send email to pay to agent
-                }else if (noFreeConversations < PAYMENT_PLANS.FREE.COUNT){
+                } else if (noFreeConversations < PAYMENT_PLANS.FREE.COUNT) {
                     subscriptionType = PAYMENT_PLANS.FREE.NAME;
                     isVisible = true;
-                }else{
+                } else {
                     subscriptionType = null;
                     isVisible = false
                 }
@@ -75,7 +75,7 @@ module.exports = {
             return conversationIds;
         }
 
-        const conversations =  (await Promise.all(
+        const conversations = (await Promise.all(
             conversationIds.map((async ({conversationId, isVisible, subscriptionType}) => {
                 const conversation = {};
                 const otherParticipantId = await getOtherParticipant(conversationId, uid);
@@ -100,22 +100,32 @@ module.exports = {
             }))
         )).filter(conversation => conversation.lastMessage);
 
-        return conversations.sort(function(x, y){
-                return y.lastMessage.createdAt - x.lastMessage.createdAt
+        return conversations.sort(function (x, y) {
+            return y.lastMessage.createdAt - x.lastMessage.createdAt
 
         })
 
     },
 
-    updateConversations:async (uid)=>{
+    updateConversations: async (uid) => {
 
         const currentPlan = await getCurrentPlan(uid);
 
-        if (currentPlan === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME){
-            await updateConversationByUid(uid, {subscriptionType: currentPlan})
+        if (currentPlan === PAYMENT_PLANS.FREE.NAME) {
+            throw new Error("User haven't subscribed to any plan")
         }
 
-        await updateConversationByUid(uid, {subscriptionType:currentPlan, isVisible: true})
+        const conversationsIds = await getConversationIdsForUid(uid);
+        await Promise.all(
+            conversationsIds.map((async (id) => {
+                    if (currentPlan === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
+                        await updateConversationByUid(id, {subscriptionType: currentPlan})
+                    }
+
+                    await updateConversationByUid(id, {isVisible: true})
+                })
+            ))
+
 
     }
 }
