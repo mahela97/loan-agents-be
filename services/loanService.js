@@ -1,4 +1,4 @@
-const {getAllLonsDB, addLoanTypeDB, isLoanTypeExist, updateLoanTypeByLid} = require("../repositories/publicRepository/loanRepository");
+const {getAllLonsDB, addLoanTypeDB, isLoanTypeExist, updateLoanTypeByLid, getLoanById} = require("../repositories/publicRepository/loanRepository");
 const {getFile, deleteFile} = require("./storageService");
 const {STORAGE, LOAN_TYPE_TABLE} = require("../constants/const");
 module.exports = {
@@ -25,5 +25,14 @@ module.exports = {
             return isLoanExist.loanId
         }
         return  (await addLoanTypeDB(details))[0];
+    },
+
+    deleteLoan:async (id)=>{
+
+        const isLoanExist = await getLoanById(id);
+        if (!isLoanExist.archived){
+            await updateLoanTypeByLid(id, {archived: true});
+            await deleteFile(STORAGE.LOCATIONS.LOAN_ICONS, id)
+        }
     }
 }

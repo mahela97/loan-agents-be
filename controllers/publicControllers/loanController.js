@@ -1,7 +1,8 @@
-const {getAllLoans, addLoanType} = require("../../services/loanService");
+const {getAllLoans, addLoanType, deleteLoan} = require("../../services/loanService");
 const Joi = require("joi");
 const {addFile} = require("../../services/storageService");
 const {STORAGE} = require("../../constants/const");
+const {commonError} = require("../../utils/commonErrorhandler");
 module.exports ={
     getAllLoans:async(req,res)=>{
         try{
@@ -38,6 +39,29 @@ module.exports ={
 
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
+        }
+    },
+
+    deleteLoanType:async (req,res)=>{
+
+        const schema = Joi.object({
+            id:Joi.string().required()
+        })
+
+        const validate = schema.validate(req.params)
+        if (validate.error){
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const {id} = validate.value
+
+        try{
+
+            await deleteLoan(id);
+            res.status(201).send({success:1})
+        }catch(error){
+            commonError(error, res)
         }
     }
 }

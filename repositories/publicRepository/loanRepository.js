@@ -43,5 +43,10 @@ module.exports = {
 
     updateLoanTypeByLid: async (lid, details) =>{
         await knex(LOAN_TYPE_TABLE.NAME).update(details).where(LOAN_TYPE_TABLE.LOAN_ID,lid)
+    },
+
+    getLoanById:async (id)=>{
+        const result = await knex(LOAN_TYPE_TABLE.NAME).select(COMMON.SELECT_ALL).where(LOAN_TYPE_TABLE.LOAN_ID, id)
+        return result[0]
     }
 }

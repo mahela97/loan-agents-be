@@ -8,8 +8,6 @@ const router = require("express").Router();
 
 router.get("/", getAllLoans)
 
-router.post("/", multer, addLoanType)
-
 
 
 module.exports = router;
