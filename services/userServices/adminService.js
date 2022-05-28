@@ -1,5 +1,6 @@
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
-const {saveAdmin} = require("../../repositories/userRepositories/adminRepository");
+const {saveAdmin, getAdminByEmail} = require("../../repositories/userRepositories/adminRepository");
+const { sign } = require("jsonwebtoken");
 
 module.exports = {
 
@@ -8,8 +9,27 @@ module.exports = {
         const salt = genSaltSync(10);
         data.password = hashSync(data.password, salt);
         const result = (await saveAdmin(data));
-return result[0].uid
+        return result[0].uid
+    },
 
-        console.log("done")
+    loginAdmin:async({email, password})=>{
+
+       const user = (await getAdminByEmail(email))[0];
+       if (!user){
+           return false;
+       }
+        const result = compareSync(
+            password,
+            user.password
+        );
+
+       if (result){
+            user.password = undefined;
+           const jsontoken = sign({  user }, "qwe1234", {
+               expiresIn: "1day",
+           });
+           return jsontoken;
+       }
+       return null;
     }
 }

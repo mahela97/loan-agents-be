@@ -13,7 +13,8 @@ module.exports = {
         }
     },
     ADMIN_TABLE:{
-        NAME: "admin"
+        NAME: "admin",
+        EMAIL: "email"
     }
     ,
     LOAN_TYPE_TABLE: {
