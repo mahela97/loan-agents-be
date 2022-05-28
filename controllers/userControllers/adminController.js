@@ -1,7 +1,9 @@
 const Joi = require("joi");
 const {commonError} = require("../../utils/commonErrorhandler");
 const {error} = require("firebase-functions/logger");
-const {registerAdmin, loginAdmin, updateMetaData, addLanguageService, deleteLanguageService} = require("../../services/userServices/adminService");
+const {registerAdmin, loginAdmin, updateMetaData, addLanguageService, deleteLanguageService,
+    updateContactDetailVisibility
+} = require("../../services/userServices/adminService");
 const {addFile} = require("../../services/storageService");
 const {SITE_META_DATA_TABLE, STORAGE} = require("../../constants/const");
 module.exports = {
@@ -157,6 +159,63 @@ module.exports = {
         try{
 
             await deleteLanguageService(id);
+            res.status(201).send({success:1})
+        }catch(error){
+            commonError(error, res)
+        }
+    },
+
+    updateVisibility:async(req,res)=>{
+
+        const schema = Joi.object({
+            FREE:{
+                PHONE:Joi.bool().default(false),
+                EMAIL:Joi.bool().default(false),
+                WEB:Joi.bool().default(false),
+                FAX:Joi.bool().default(false),
+                SKYPE:Joi.bool().default(false),
+                FACEBOOK:Joi.bool().default(false),
+                LINKEDIN:Joi.bool().default(false),
+                TWITTER:Joi.bool().default(false),
+                DRIBBLE:Joi.bool().default(false),
+                TWITCH:Joi.bool().default(false),
+            },
+            PAG:{
+                PHONE:Joi.bool().default(false),
+                EMAIL:Joi.bool().default(false),
+                WEB:Joi.bool().default(false),
+                FAX:Joi.bool().default(false),
+                SKYPE:Joi.bool().default(false),
+                FACEBOOK:Joi.bool().default(false),
+                LINKEDIN:Joi.bool().default(false),
+                TWITTER:Joi.bool().default(false),
+                DRIBBLE:Joi.bool().default(false),
+                TWITCH:Joi.bool().default(false),
+            },
+            PREMIUM:{
+                PHONE:Joi.bool().default(false),
+                EMAIL:Joi.bool().default(false),
+                WEB:Joi.bool().default(false),
+                FAX:Joi.bool().default(false),
+                SKYPE:Joi.bool().default(false),
+                FACEBOOK:Joi.bool().default(false),
+                LINKEDIN:Joi.bool().default(false),
+                TWITTER:Joi.bool().default(false),
+                DRIBBLE:Joi.bool().default(false),
+                TWITCH:Joi.bool().default(false),
+            }
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error){
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const data = validate.value
+
+        try{
+            await updateContactDetailVisibility(data);
             res.status(201).send({success:1})
         }catch(error){
             commonError(error, res)

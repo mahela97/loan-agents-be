@@ -3,6 +3,7 @@ const {saveAdmin, getAdminByEmail} = require("../../repositories/userRepositorie
 const { sign } = require("jsonwebtoken");
 const {updateMetaData} = require("../../repositories/publicRepository/publicRepository");
 const {getLanguageByName, addLanguageToDb, updateLanguage, getLanguageById} = require("../../repositories/publicRepository/languageRepository");
+const {updatePackageSocialMedia} = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 
 module.exports = {
 
@@ -63,5 +64,15 @@ module.exports = {
         if (isExist){
             await updateLanguage(isExist.languageName, true);
         }
+    },
+
+    updateContactDetailVisibility:async (data)=>{
+        const result = []
+           Object.keys(data).map(key=>{
+             Object.keys(data[key]).forEach(value=>{
+                result.push({packageName:key, contactMethod:value, visibility:data[key][value]})
+             })
+        })
+       await updatePackageSocialMedia(result)
     }
 }

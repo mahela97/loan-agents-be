@@ -1,4 +1,6 @@
-const {register, login, getCurrentUser, editMetadata, updateCover, updateLogo, addLanguage, deleteLanguage} = require("../controllers/userControllers/adminController");
+const {register, login, getCurrentUser, editMetadata, updateCover, updateLogo, addLanguage, deleteLanguage,
+    updateVisibility
+} = require("../controllers/userControllers/adminController");
 const {isAdmin} = require("../middlewares/isAdmin");
 const {addLoanType, deleteLoanType} = require("../controllers/publicControllers/loanController");
 const router = require("express").Router();
@@ -19,5 +21,7 @@ router.delete("/language/:id", deleteLanguage)
 
 router.post("/loan", multer, addLoanType)
 router.delete("/loan/:id", deleteLoanType)
+
+router.patch("/socialMedia", updateVisibility)
 
 module.exports = router;

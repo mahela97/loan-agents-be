@@ -133,5 +133,8 @@ module.exports = {
         },
         price: "price"
     },
+    CONTACT_METHOD_PACKAGE_TABLE:{
+        NAME:"contact_method_package"
+    }
 
 };

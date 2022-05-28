@@ -1,5 +1,5 @@
 const knex = require("../../db/db-config");
-const { CONTACT_METHOD_TABLE, SELECT_ALL, USER_CONTACT_METHOD_TABLE} = require("../../constants/const");
+const { CONTACT_METHOD_TABLE, SELECT_ALL, USER_CONTACT_METHOD_TABLE, CONTACT_METHOD_PACKAGE_TABLE} = require("../../constants/const");
 
 module.exports = {
     getDbAllSocialMedia:async()=>{
@@ -33,5 +33,11 @@ module.exports = {
                 .where(CONTACT_METHOD_TABLE.CONTACT_METHOD_ID, field)
                 .where(USER_CONTACT_METHOD_TABLE.USER_ID, uid)
         )[0]
+    },
+
+    updatePackageSocialMedia: async (data)=>{
+        await knex(CONTACT_METHOD_PACKAGE_TABLE.NAME)
+            .del().whereNot("visibility", null)
+        await knex(CONTACT_METHOD_PACKAGE_TABLE.NAME).insert(data)
     }
 }

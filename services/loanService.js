@@ -2,6 +2,7 @@ const {getAllLonsDB, addLoanTypeDB, isLoanTypeExist, updateLoanTypeByLid, getLoa
 const {getFile, deleteFile} = require("./storageService");
 const {STORAGE, LOAN_TYPE_TABLE} = require("../constants/const");
 module.exports = {
+
     getAllLoans:async()=>{
         const loanTypes = await getAllLonsDB();
         const updatedLoans = await Promise.all(
