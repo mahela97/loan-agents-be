@@ -55,5 +55,10 @@ module.exports = {
         }catch (e){
             commonError(e, res)
         }
-    }
+    },
+
+    getCurrentUser:async (req,res)=>[
+
+        res.status(201).send(req.user)
+    ]
 }
