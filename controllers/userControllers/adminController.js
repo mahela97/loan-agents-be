@@ -54,7 +54,7 @@ module.exports = {
             }
             res.status(201).send({success:1, token})
         }catch (e){
-            commonError(e, res)
+            res.status(400).send({success:0, message:e.message})
         }
     },
 

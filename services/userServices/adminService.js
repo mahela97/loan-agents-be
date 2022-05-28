@@ -16,7 +16,7 @@ module.exports = {
 
        const user = (await getAdminByEmail(email))[0];
        if (!user){
-           return false;
+           throw new Error("User not found");
        }
         const result = compareSync(
             password,
@@ -25,11 +25,11 @@ module.exports = {
 
        if (result){
             user.password = undefined;
-           const jsontoken = sign({  user }, "qwe1234", {
+           return sign({user}, "qwe1234", {
                expiresIn: "1day",
            });
-           return jsontoken;
+       }else{
+          throw new Error("Password mismatch")
        }
-       return null;
     }
 }

@@ -16,7 +16,7 @@ module.exports = {
                     const email = decoded.user.email;
                     const user = (await getAdminByEmail(email))[0];
                     if (!user){
-                        res.status(404).send("User not found")
+                        res.status(400).send({success:0, message:"User not found"})
                     }
                     user.password = undefined;
                     req.user = user;
