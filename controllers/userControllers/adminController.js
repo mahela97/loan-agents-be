@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const {commonError} = require("../../utils/commonErrorhandler");
 const {error} = require("firebase-functions/logger");
-const {registerAdmin, loginAdmin, updateMetaData} = require("../../services/userServices/adminService");
+const {registerAdmin, loginAdmin, updateMetaData, addLanguageService} = require("../../services/userServices/adminService");
 const {addFile} = require("../../services/storageService");
 const {SITE_META_DATA_TABLE, STORAGE} = require("../../constants/const");
 module.exports = {
@@ -113,6 +113,28 @@ module.exports = {
 
             await addFile(STORAGE.LOCATIONS.META_DATA, "logo", req.file);
             res.status(200).send({success:1})
+        }catch(error){
+            commonError(error, res)
+        }
+    },
+
+    addLanguage:async (req,res)=>{
+        const schema = Joi.object({
+            languageName:Joi.string().required()
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error){
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const {languageName} = validate.value
+
+        try{
+
+            await addLanguageService(languageName);
+            res.status(201).send({success:1})
         }catch(error){
             commonError(error, res)
         }

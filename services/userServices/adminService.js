@@ -2,6 +2,7 @@ const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const {saveAdmin, getAdminByEmail} = require("../../repositories/userRepositories/adminRepository");
 const { sign } = require("jsonwebtoken");
 const {updateMetaData} = require("../../repositories/publicRepository/publicRepository");
+const {getLanguageByName, addLanguageToDb, updateLanguage} = require("../../repositories/publicRepository/languageRepository");
 
 module.exports = {
 
@@ -37,5 +38,16 @@ module.exports = {
     updateMetaData:async (data)=>{
 
         await updateMetaData(data)
+    },
+
+    addLanguageService:async (languageName)=>{
+
+        const isExist = await getLanguageByName(languageName);
+        if (!isExist){
+            await addLanguageToDb(languageName);
+        }
+        else{
+            await updateLanguage(languageName, false);
+        }
     }
 }
