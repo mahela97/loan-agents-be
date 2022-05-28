@@ -1,6 +1,7 @@
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const {saveAdmin, getAdminByEmail} = require("../../repositories/userRepositories/adminRepository");
 const { sign } = require("jsonwebtoken");
+const {updateMetaData} = require("../../repositories/publicRepository/publicRepository");
 
 module.exports = {
 
@@ -31,5 +32,10 @@ module.exports = {
        }else{
           throw new Error("Password mismatch")
        }
+    },
+
+    updateMetaData:async (data)=>{
+
+        await updateMetaData(data)
     }
 }

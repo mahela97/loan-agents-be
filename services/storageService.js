@@ -18,7 +18,6 @@ async function isFileExist(path, fileName) {
 module.exports = {
 
     addFile:async (path, fileName, file)=>{
-console.log("test");
         const bucket = await getStorageBucket();
         const fileObject = await bucket.file(`${path}${fileName}`);
         await fileObject.save(file.buffer, {

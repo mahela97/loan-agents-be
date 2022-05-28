@@ -1,7 +1,9 @@
 const Joi = require("joi");
 const {commonError} = require("../../utils/commonErrorhandler");
 const {error} = require("firebase-functions/logger");
-const {registerAdmin, loginAdmin} = require("../../services/userServices/adminService");
+const {registerAdmin, loginAdmin, updateMetaData} = require("../../services/userServices/adminService");
+const {addFile} = require("../../services/storageService");
+const {SITE_META_DATA_TABLE, STORAGE} = require("../../constants/const");
 module.exports = {
 
     register:async(req,res)=>{
@@ -58,8 +60,61 @@ module.exports = {
         }
     },
 
-    getCurrentUser:async (req,res)=>[
+    getCurrentUser:async (req,res)=>{
 
         res.status(201).send(req.user)
-    ]
+},
+    editMetadata:async (req,res) =>{
+
+        const schema = Joi.object({
+            mainTitle: Joi.string().allow(""),
+            subTitle: Joi.string().allow("")
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error){
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+         const data = validate.value
+
+        try{
+
+            await updateMetaData(data);
+            res.status(200).send({success:1})
+        }catch(error){
+            commonError(error, res)
+        }
+    },
+
+    updateCover:async (req,res)=>{
+
+        if (!req.file){
+            res.status(404).send({message: "File not found"})
+            return;
+        }
+
+        try{
+            await addFile(STORAGE.LOCATIONS.META_DATA, "cover", req.file);
+            res.status(200).send({success:1})
+        }catch(error){
+
+        }
+    },
+
+    updateLogo:async (req,res)=>{
+
+        if (!req.file){
+            res.status(404).send({message: "File not found"})
+            return;
+        }
+        try{
+
+            await addFile(STORAGE.LOCATIONS.META_DATA, "logo", req.file);
+            res.status(200).send({success:1})
+        }catch(error){
+            commonError(error, res)
+        }
+    }
 }
