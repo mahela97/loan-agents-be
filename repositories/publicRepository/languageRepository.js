@@ -38,7 +38,7 @@ module.exports = {
     getLanguageByName: async (languageName) => {
         const result = await knex(LANGUAGE_TABLE.NAME)
             .select(COMMON.SELECT_ALL)
-            .where(LANGUAGE_TABLE.LANGUAGE_NAME, languageName)
+            .whereILike(LANGUAGE_TABLE.LANGUAGE_NAME, `${languageName}%`)
         return result[0];
     },
 
