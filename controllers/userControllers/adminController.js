@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const {commonError} = require("../../utils/commonErrorhandler");
 const {error} = require("firebase-functions/logger");
-const {registerAdmin, loginAdmin, updateMetaData, addLanguageService} = require("../../services/userServices/adminService");
+const {registerAdmin, loginAdmin, updateMetaData, addLanguageService, deleteLanguageService} = require("../../services/userServices/adminService");
 const {addFile} = require("../../services/storageService");
 const {SITE_META_DATA_TABLE, STORAGE} = require("../../constants/const");
 module.exports = {
@@ -134,6 +134,29 @@ module.exports = {
         try{
 
             await addLanguageService(languageName);
+            res.status(201).send({success:1})
+        }catch(error){
+            commonError(error, res)
+        }
+    },
+
+    deleteLanguage:async (req,res)=>{
+
+        const schema = Joi.object({
+            id:Joi.string().required()
+        })
+
+        const validate = schema.validate(req.params)
+        if (validate.error){
+            res.status(400).send({message: validate.error.details});
+            return;
+        }
+
+        const {id} = validate.value
+
+        try{
+
+            await deleteLanguageService(id);
             res.status(201).send({success:1})
         }catch(error){
             commonError(error, res)

@@ -2,7 +2,7 @@ const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const {saveAdmin, getAdminByEmail} = require("../../repositories/userRepositories/adminRepository");
 const { sign } = require("jsonwebtoken");
 const {updateMetaData} = require("../../repositories/publicRepository/publicRepository");
-const {getLanguageByName, addLanguageToDb, updateLanguage} = require("../../repositories/publicRepository/languageRepository");
+const {getLanguageByName, addLanguageToDb, updateLanguage, getLanguageById} = require("../../repositories/publicRepository/languageRepository");
 
 module.exports = {
 
@@ -47,7 +47,21 @@ module.exports = {
             await addLanguageToDb(languageName);
         }
         else{
-            await updateLanguage(languageName, false);
+            if (isExist.archived){
+                await updateLanguage(languageName, false);
+            }
+            else{
+                throw new Error("Language already exist")
+            }
+
+        }
+    },
+
+    deleteLanguageService:async (id)=>{
+
+        const isExist = await getLanguageById(id);
+        if (isExist){
+            await updateLanguage(isExist.languageName, true);
         }
     }
 }

@@ -12,7 +12,7 @@ module.exports = {
     },
 
     getAllLanguages: async () => {
-        return knex(LANGUAGE_TABLE.NAME).select(COMMON.SELECT_ALL)
+        return knex(LANGUAGE_TABLE.NAME).select(COMMON.SELECT_ALL).where(COMMON.ARCHIVED, false)
     },
 
 
@@ -40,6 +40,13 @@ module.exports = {
             .select(COMMON.SELECT_ALL)
             .where(LANGUAGE_TABLE.LANGUAGE_NAME, languageName)
         return result[0];
+    },
+
+    getLanguageById:async (id)=>{
+        const result = await knex(LANGUAGE_TABLE.NAME)
+            .select(COMMON.SELECT_ALL)
+            .where(LANGUAGE_TABLE.LANGUAGE_ID, id);
+        return result[0]
     },
 
     addLanguageToDb: async (languageName) => {
