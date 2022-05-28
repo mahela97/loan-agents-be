@@ -50,6 +50,7 @@ module.exports = {
             const token = await loginAdmin(data);
             if (!token){
                 res.status(404).send({success:0,message:"User not found"})
+                return;
             }
             res.status(201).send({success:1, token})
         }catch (e){
