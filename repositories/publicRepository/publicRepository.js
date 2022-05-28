@@ -12,7 +12,7 @@ module.exports = {
             const data = await knex(SITE_META_DATA_TABLE.NAME).select(COMMON.SELECT_ALL)
             data[0].cover = cover;
             data[0].logo = logo;
-            res.status(200).send(data[0]);
+            res.status(200).send(data);
         }catch(error){
             commonError(error,res)
         }
