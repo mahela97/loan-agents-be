@@ -12,6 +12,10 @@ module.exports = {
             AGENT: "agent"
         }
     },
+    ADMIN_TABLE:{
+        NAME: "admin"
+    }
+    ,
     LOAN_TYPE_TABLE: {
         NAME: "loanType",
         LOAN_ID: "loanId",

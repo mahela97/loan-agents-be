@@ -9,5 +9,6 @@ router.use('/user', require('./userRoutes'));
 router.use("/message", require("./messageRoutes"))
 router.use("/socialMedia",require("./socialMediaRoutes"))
 router.use("/loan", require("./loanRoutes"))
+router.use("/admin", require("./adminRoutes"))
 
 module.exports = router;
