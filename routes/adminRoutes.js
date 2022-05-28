@@ -1,5 +1,5 @@
 const {register, login, getCurrentUser, editMetadata, updateCover, updateLogo, addLanguage, deleteLanguage,
-    updateVisibility
+    updateVisibility,getVisibilities
 } = require("../controllers/userControllers/adminController");
 const {isAdmin} = require("../middlewares/isAdmin");
 const {addLoanType, deleteLoanType} = require("../controllers/publicControllers/loanController");
@@ -23,5 +23,6 @@ router.post("/loan", multer, addLoanType)
 router.delete("/loan/:id", deleteLoanType)
 
 router.patch("/socialMedia", updateVisibility)
+router.get("/socialMedia", getVisibilities)
 
 module.exports = router;

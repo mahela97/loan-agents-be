@@ -2,7 +2,7 @@ const Joi = require("joi");
 const {commonError} = require("../../utils/commonErrorhandler");
 const {error} = require("firebase-functions/logger");
 const {registerAdmin, loginAdmin, updateMetaData, addLanguageService, deleteLanguageService,
-    updateContactDetailVisibility
+    updateContactDetailVisibility, getVisibilities
 } = require("../../services/userServices/adminService");
 const {addFile} = require("../../services/storageService");
 const {SITE_META_DATA_TABLE, STORAGE} = require("../../constants/const");
@@ -217,6 +217,15 @@ module.exports = {
         try{
             await updateContactDetailVisibility(data);
             res.status(201).send({success:1})
+        }catch(error){
+            commonError(error, res)
+        }
+    },
+
+    getVisibilities:async (req,res)=>{
+        try{
+            const result = await getVisibilities();
+            res.status(201).send(result)
         }catch(error){
             commonError(error, res)
         }

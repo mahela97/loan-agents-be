@@ -3,7 +3,7 @@ const {saveAdmin, getAdminByEmail} = require("../../repositories/userRepositorie
 const { sign } = require("jsonwebtoken");
 const {updateMetaData} = require("../../repositories/publicRepository/publicRepository");
 const {getLanguageByName, addLanguageToDb, updateLanguage, getLanguageById} = require("../../repositories/publicRepository/languageRepository");
-const {updatePackageSocialMedia} = require("../../repositories/socialMediaRepositories/socialMediaRepository");
+const {updatePackageSocialMedia, getVisibilityFromDb} = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 
 module.exports = {
 
@@ -74,5 +74,25 @@ module.exports = {
              })
         })
        await updatePackageSocialMedia(result)
+    },
+
+    getVisibilities:async ()=>{
+        const result = await getVisibilityFromDb();
+        const socialMedias = {FREE:{},
+            PREMIUM:{},
+            PAG:{}
+        };
+
+        result.forEach(value=>{
+            if (value.packageName == "FREE"){
+                socialMedias.FREE[value.contactMethod] = value.visibility
+            }else if (value.packageName == "PREMIUM"){
+                socialMedias.PREMIUM[value.contactMethod] = value.visibility
+            }else if (value.packageName == "PAG"){
+                socialMedias.PAG[value.contactMethod] = value.visibility
+            }
+        });
+
+        return socialMedias
     }
 }

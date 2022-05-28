@@ -1,5 +1,5 @@
 const knex = require("../../db/db-config");
-const { CONTACT_METHOD_TABLE, SELECT_ALL, USER_CONTACT_METHOD_TABLE, CONTACT_METHOD_PACKAGE_TABLE} = require("../../constants/const");
+const { CONTACT_METHOD_TABLE, SELECT_ALL, USER_CONTACT_METHOD_TABLE, CONTACT_METHOD_PACKAGE_TABLE, COMMON} = require("../../constants/const");
 
 module.exports = {
     getDbAllSocialMedia:async()=>{
@@ -39,5 +39,11 @@ module.exports = {
         await knex(CONTACT_METHOD_PACKAGE_TABLE.NAME)
             .del().whereNot("visibility", null)
         await knex(CONTACT_METHOD_PACKAGE_TABLE.NAME).insert(data)
+    },
+
+    getVisibilityFromDb:async ()=>{
+
+        return knex(CONTACT_METHOD_PACKAGE_TABLE.NAME)
+            .select(COMMON.SELECT_ALL)
     }
 }
