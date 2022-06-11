@@ -21,7 +21,7 @@ const lodash = require("lodash");
 const {getCurrentPlan} = require("../paymentService");
 
 module.exports = {
-    getAgentDetails: async (uid, isLoggedIn) => {
+    getAgentDetails: async (uid, token) => {
         const userDetails = await getDbUserById(uid);
         if (!userDetails) {
             return null; // if agent is archived, wont proceed
@@ -68,7 +68,7 @@ module.exports = {
                 plan = subscriptionType;
         }
          let subscriptionVisibility;
-        if (isLoggedIn){
+        if (token && token === uid){
             subscriptionVisibility = (await getAllPackageVisibility(plan)).map(limit=>limit.contactMethod);
         }else{
             subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);

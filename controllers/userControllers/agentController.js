@@ -21,8 +21,9 @@ module.exports = {
             return
         }
         const {uid} = validate.value
+        const token = req.user.user_id;
         try {
-            const agentDetails = await getAgentDetails(uid,false);
+            const agentDetails = await getAgentDetails(uid,token);
             if (!agentDetails) {
                 res.status(404).send("User not found");
                 return;
