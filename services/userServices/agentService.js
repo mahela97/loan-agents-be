@@ -71,8 +71,20 @@ module.exports = {
         if (token && token === uid){
             subscriptionVisibility = (await getAllPackageVisibility(plan)).map(limit=>limit.contactMethod);
         }else{
-            subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);
+            subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod.toLowerCase());
         }
+        const updatedSocialMedia = {};
+        const updatedContactDetail = {};
+        Object.keys(socialMedia).forEach(key=>{
+            if (subscriptionVisibility.includes(key)){
+                updatedSocialMedia[key] = socialMedia[key]
+            }
+        })
+        Object.keys(contactDetails).forEach(key=>{
+            if (subscriptionVisibility.includes(key)){
+                updatedContactDetail[key] = contactDetails[key]
+            }
+        })
         return {
             firstName,
             lastName,
@@ -81,13 +93,13 @@ module.exports = {
             country,
             postalCode,
             languages,
-            socialMedia,
+            socialMedia:updatedSocialMedia,
             createdAt,
-            contactDetails, ...updatedUser,
+            contactDetails:updatedContactDetail,
+            ...updatedUser,
             uid,
             loanTypes: updatedLoanTypes,
-            subscriptionType,
-            subscriptionVisibility
+            subscriptionType
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
