@@ -22,7 +22,7 @@ module.exports = {
         }
         const {uid} = validate.value
         try {
-            const agentDetails = await getAgentDetails(uid);
+            const agentDetails = await getAgentDetails(uid,false);
             if (!agentDetails) {
                 res.status(404).send("User not found");
                 return;

@@ -6,7 +6,7 @@ const {
     getAgentDetailsByUid, updateAgentDetails, getAgentsByLoanTypesDB
 } = require("../../repositories/userRepositories/agentRepository");
 const {
-    getSocialMediaByUid, getContactDetailsByUid, getPackageVisibility
+    getSocialMediaByUid, getContactDetailsByUid, getPackageVisibility, getAllPackageVisibility
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
 const {
@@ -21,7 +21,7 @@ const lodash = require("lodash");
 const {getCurrentPlan} = require("../paymentService");
 
 module.exports = {
-    getAgentDetails: async (uid) => {
+    getAgentDetails: async (uid, isLoggedIn) => {
         const userDetails = await getDbUserById(uid);
         if (!userDetails) {
             return null; // if agent is archived, wont proceed
@@ -67,7 +67,12 @@ module.exports = {
             default:
                 plan = subscriptionType;
         }
-        const subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);
+         let subscriptionVisibility;
+        if (isLoggedIn){
+            subscriptionVisibility = (await getAllPackageVisibility(plan)).map(limit=>limit.contactMethod);
+        }else{
+            subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);
+        }
         return {
             firstName,
             lastName,
@@ -81,7 +86,8 @@ module.exports = {
             contactDetails, ...updatedUser,
             uid,
             loanTypes: updatedLoanTypes,
-            subscriptionType
+            subscriptionType,
+            subscriptionVisibility
         }
 
     }, editAgentBasicDetails: async (uid, details) => {
@@ -136,7 +142,7 @@ module.exports = {
         if (limit === -1){
 
              const agents = (await Promise.all(filterList[0].map(async (id) => {
-                return module.exports.getAgentDetails(id);
+                return module.exports.getAgentDetails(id, false);
             })))
             return agents
         }
@@ -205,7 +211,7 @@ module.exports = {
         const filteredAgentIds = lodash.intersection(...filterList);
 
         const filtersAgents = await Promise.all(filteredAgentIds.map(async (id) => {
-            return module.exports.getAgentDetails(id);
+            return module.exports.getAgentDetails(id, false);
         }))
 
         if (sortBy === COMMON.DESC) {

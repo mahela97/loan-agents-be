@@ -5,8 +5,10 @@ const {getAgent, editAgentDetails, addAgentSocialMedia, addAgentContactDetail,
     addAgentIntroduction, addAgentEducation, updateAgentEducation, deleteAgentEducation, addAgentContactVia,
     updateAgentLoanTypes, getAllAgents, createAgentSubscription, getPaymentPortal, makePayment, successSubscription
 } = require("../controllers/userControllers/agentController");
+const {validateFirebaseCustomToken} = require("../middlewares/customValidationToker");
 
 // router.use(isAgent);
+router.use(validateFirebaseCustomToken);
 router.get("/", getAgent)
 router.get("/all", getAllAgents);
 router.patch("/:uid/basicDetails", editAgentDetails);
