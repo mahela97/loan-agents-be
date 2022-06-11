@@ -46,4 +46,13 @@ module.exports = {
         return knex(CONTACT_METHOD_PACKAGE_TABLE.NAME)
             .select(COMMON.SELECT_ALL)
     }
+    ,
+
+    getPackageVisibility:async (plan)=>{
+
+        return knex(CONTACT_METHOD_PACKAGE_TABLE.NAME)
+            .select(CONTACT_METHOD_PACKAGE_TABLE.CONTACT_METHOD)
+            .where(CONTACT_METHOD_PACKAGE_TABLE.PACKAGE_NAME, plan)
+            .where(CONTACT_METHOD_PACKAGE_TABLE.VISIBILITY, true)
+    }
 }

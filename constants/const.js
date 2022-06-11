@@ -132,10 +132,16 @@ module.exports = {
             NAME:"FREE",
             COUNT: 2
         },
+        PREMIUM:{
+            NAME:"PREMIUM"
+        },
         price: "price"
     },
     CONTACT_METHOD_PACKAGE_TABLE:{
-        NAME:"contact_method_package"
+        NAME:"contact_method_package",
+        CONTACT_METHOD:"contactMethod",
+        VISIBILITY:"visibility",
+        PACKAGE_NAME:"packageName"
     }
 
 };

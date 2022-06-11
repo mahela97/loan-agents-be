@@ -116,7 +116,8 @@ module.exports = {
 
         const uid = await getAllUsersByType(USER_TABLE.values.CLIENT);
         return await Promise.all(uid.map(async user => {
-            return getDbUserById(user.userId);
+            const u = await getDbUserById(user.userId);
+            return u;
         }));
     },
 

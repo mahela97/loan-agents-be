@@ -6,7 +6,7 @@ const {
     getAgentDetailsByUid, updateAgentDetails, getAgentsByLoanTypesDB
 } = require("../../repositories/userRepositories/agentRepository");
 const {
-    getSocialMediaByUid, getContactDetailsByUid
+    getSocialMediaByUid, getContactDetailsByUid, getPackageVisibility
 } = require("../../repositories/socialMediaRepositories/socialMediaRepository");
 const knex = require("../../db/db-config");
 const {
@@ -57,7 +57,17 @@ module.exports = {
         });
 
         const subscriptionType = (await getCurrentPlan(uid))
+        let plan;
 
+        switch (subscriptionType){
+            case PAYMENT_PLANS.MONTHLY.NAME:
+            case PAYMENT_PLANS.YEARLY.NAME:
+                plan = PAYMENT_PLANS.PREMIUM.NAME
+                break;
+            default:
+                plan = subscriptionType;
+        }
+        const subscriptionLimits = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);
         return {
             firstName,
             lastName,

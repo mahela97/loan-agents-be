@@ -39,6 +39,7 @@ module.exports = {
                 `${AGENT_LANGUAGE_TABLE.NAME}.${AGENT_LANGUAGE_TABLE.USER_ID}` )
             .whereIn(AGENT_LANGUAGE_TABLE.LANGUAGE_ID, languages)
             .where(USER_TABLE.ROLE, type).distinct()
+            .where(COMMON.ARCHIVED, false)
     },
 
     getAllUsersByType:async (type) =>{
@@ -46,6 +47,7 @@ module.exports = {
         return knex(USER_TABLE.NAME)
             .select(USER_TABLE.USER_ID)
             .where(USER_TABLE.ROLE, type)
+            .where(COMMON.ARCHIVED, false)
     },
 
     getUsersByFieldRole:async (field, fieldValue, role)=>{
@@ -54,6 +56,7 @@ module.exports = {
             .select(USER_TABLE.USER_ID)
             .whereILike(field, `${fieldValue}%`)
             .where(USER_TABLE.ROLE, role)
+            .where(COMMON.ARCHIVED, false)
     },
 
     getUsersByQuery:async (query)=>{
@@ -66,6 +69,7 @@ module.exports = {
             .orWhereILike(USER_TABLE.COUNTRY, `${query}%`)
             .orWhereILike(USER_TABLE.POSTAL_CODE, `${query}%`)
             .orWhereILike(USER_TABLE.FIRST_NAME, `${query}%`)
+            .where(COMMON.ARCHIVED, false)
 
 
     },
@@ -82,5 +86,5 @@ module.exports = {
         await knex(USER_TABLE.NAME)
             .update({archived: true})
             .where(USER_TABLE.USER_ID, uid)
-    }
+    },
 };
