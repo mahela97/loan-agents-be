@@ -9,7 +9,8 @@ module.exports = {
         POSTAL_CODE: "postalCode",
         ROLE: "role",
         values: {
-            AGENT: "agent"
+            AGENT: "agent",
+            CLIENT: "client"
         }
     },
     ADMIN_TABLE:{

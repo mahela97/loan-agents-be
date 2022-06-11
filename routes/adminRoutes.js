@@ -10,7 +10,6 @@ router.post("/register", register)
 router.post("/login", login)
 router.get("/me", isAdmin, getCurrentUser)
 
-
 router.patch("/metadata", editMetadata)
 router.patch("/metadata/cover", multer, updateCover)
 router.patch("/metadata/logo", multer, updateLogo)

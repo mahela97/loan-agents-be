@@ -1,5 +1,5 @@
 const {
-    createDbUser, getDbUserById, addUserContactMethodsToDB,
+    createDbUser, getDbUserById, addUserContactMethodsToDB, getAllUsersByType, deleteUserFromDb,
 } = require("../../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
 const {
@@ -110,8 +110,18 @@ module.exports = {
             await addLanguagesToDBUser(dbLanguages, transaction)
         }
         await transaction.commit();
+    },
+
+    getAllClients:async ()=>{
+
+        const uid = await getAllUsersByType(USER_TABLE.values.CLIENT);
+        return await Promise.all(uid.map(async user => {
+            return getDbUserById(user.userId);
+        }));
+    },
+
+    deleteUser:async (uid)=>{
+        await deleteUserFromDb(uid);
     }
-
-
 };
 

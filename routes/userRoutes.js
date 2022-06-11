@@ -1,6 +1,6 @@
 const {
     test,
-    registerUser, addUserLanguage, addUserProfilePicture, deleteProfilePicture, getUserDetails
+    registerUser, addUserLanguage, addUserProfilePicture, deleteProfilePicture, getUserDetails,deleteUser
 } = require("../controllers/userControllers/userController");
 const {validateFirebaseIdToken} = require("../middlewares/validateFirebaseIdToken");
 const multer  = require('multer')().single("image")
@@ -20,7 +20,9 @@ router.delete("/:uid/profilePicture",deleteProfilePicture)
 
 router.get("/",getUserDetails)
 
+router.delete("/:uid",deleteUser)
 router.use("/agent",require("./agentRoutes"))
+router.use("/client", require("./clientRoutes"))
 
 
 

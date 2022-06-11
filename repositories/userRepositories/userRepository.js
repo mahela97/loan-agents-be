@@ -75,7 +75,12 @@ module.exports = {
         return (await knex(USER_TABLE.NAME)
             .select(...fields)
             .where(USER_TABLE.USER_ID, uid))[0]
+    },
+
+    deleteUserFromDb:async(uid)=>{
+
+        await knex(USER_TABLE.NAME)
+            .update({archived: true})
+            .where(USER_TABLE.USER_ID, uid)
     }
-
-
 };

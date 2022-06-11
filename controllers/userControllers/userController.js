@@ -1,4 +1,10 @@
-const {testService, registerUser, addLanguagesToUser, getUserByUid} = require("../../services/userServices/userService");
+const {
+    testService,
+    registerUser,
+    addLanguagesToUser,
+    getUserByUid,
+    getAllClients, deleteUser
+} = require("../../services/userServices/userService");
 const Joi = require("joi");
 const {string} = require("joi");
 const handleFirebase = require("../../utils/firebaseErrorhandler");
@@ -6,6 +12,7 @@ const admin = require("firebase-admin");
 const {addFile, deleteFile} = require("../../services/storageService");
 const {STORAGE} = require("../../constants/const");
 const {getAgentDetails} = require("../../services/userServices/agentService");
+const {commonError} = require("../../utils/commonErrorhandler");
 module.exports = {
 
     registerUser: async (req, res) => {
@@ -16,7 +23,7 @@ module.exports = {
             role: Joi.string().required(),
             password: Joi.string().required().min(6),
             city: Joi.string().required(),
-            country:Joi.string().required(),
+            country: Joi.string().required(),
             postalCode: Joi.string().required(),
             longitude: Joi.string().required(),
             latitude: Joi.string().required(),
@@ -42,7 +49,7 @@ module.exports = {
         }
     },
 
-    addUserLanguage:async (req,res)=>{
+    addUserLanguage: async (req, res) => {
         const schema = Joi.array().items(Joi.string()).allow("");
         const validate = schema.validate(req.body);
         if (validate.error) {
@@ -62,7 +69,7 @@ module.exports = {
         const body = validate.value;
         const {uid} = pathValidate.value;
         try {
-            await addLanguagesToUser(uid,body);
+            await addLanguagesToUser(uid, body);
             res.status(201).send({success: 1});
         } catch (error) {
 
@@ -72,7 +79,7 @@ module.exports = {
 
     },
 
-    addUserProfilePicture:async (req,res)=>{
+    addUserProfilePicture: async (req, res) => {
         const pathSchema = Joi.object({
             uid: Joi.string().required()
         });
@@ -81,23 +88,23 @@ module.exports = {
             res.status(400).send({message: pathValidate.error.details})
             return;
         }
-        if (!req.file){
+        if (!req.file) {
             res.status(404).send({message: "File not found"})
             return;
         }
 
         const {uid} = pathValidate.value;
 
-        try{
-            await addFile(STORAGE.LOCATIONS.USERS,uid,req.file);
-           res.status(201).send({success: 1})
-        }catch(error){
+        try {
+            await addFile(STORAGE.LOCATIONS.USERS, uid, req.file);
+            res.status(201).send({success: 1})
+        } catch (error) {
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }
     },
 
-    deleteProfilePicture:async (req,res)=>{
+    deleteProfilePicture: async (req, res) => {
 
         const pathSchema = Joi.object({
             uid: Joi.string().required()
@@ -110,16 +117,16 @@ module.exports = {
 
         const {uid} = pathValidate.value;
 
-        try{
-            await deleteFile(STORAGE.LOCATIONS.USERS,uid);
+        try {
+            await deleteFile(STORAGE.LOCATIONS.USERS, uid);
             res.status(200).send({success: 1})
-        }catch(error){
+        } catch (error) {
             if (error.message) res.status(400).send(error.message);
             else if (error) res.status(400).send(error);
         }
     },
 
-    getUserDetails : async (req,res) =>{
+    getUserDetails: async (req, res) => {
         const schema = Joi.object({
             uid: Joi.string().required()
         })
@@ -141,5 +148,34 @@ module.exports = {
         } catch (error) {
             res.status(401).send(error)
         }
+    },
+
+    getAllClients: async (req, res) => {
+        try {
+            const result = await getAllClients();
+            res.status(201).send({"success": 1, clients: result})
+        } catch (e) {
+            commonError(e, res)
+        }
+    },
+    deleteUser: async (req, res) => {
+        const schema = Joi.object({
+            uid: Joi.string().required()
+        })
+
+        const validate = schema.validate(req.params)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const {uid} = validate.value
+        try {
+            await deleteUser(uid);
+            res.status(200).send({success: 1})
+        }catch(e){
+            commonError(e,res);
+        }
     }
-};
+
+
+}
