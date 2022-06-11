@@ -13,6 +13,7 @@ const {addFile, deleteFile} = require("../../services/storageService");
 const {STORAGE} = require("../../constants/const");
 const {getAgentDetails} = require("../../services/userServices/agentService");
 const {commonError} = require("../../utils/commonErrorhandler");
+const {addFavourite, deleteFavourite} = require("../../repositories/userRepositories/userRepository");
 module.exports = {
 
     registerUser: async (req, res) => {
@@ -171,6 +172,46 @@ module.exports = {
         const {uid} = validate.value
         try {
             await deleteUser(uid);
+            res.status(200).send({success: 1})
+        }catch(e){
+            commonError(e,res);
+        }
+    },
+
+    addFavourite:async(req,res)=>{
+        const schema = Joi.object({
+            uid: Joi.string().required(),
+            agentId: Joi.string().required(),
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const {uid, agentId} = validate.value
+        try {
+            await addFavourite(uid,agentId);
+            res.status(200).send({success: 1})
+        }catch(e){
+            commonError(e,res);
+        }
+    },
+
+    removeFavourite:async(req,res)=>{
+        const schema = Joi.object({
+            uid: Joi.string().required(),
+            agentId: Joi.string().required(),
+        })
+
+        const validate = schema.validate(req.body)
+        if (validate.error) {
+            res.status(400).send(validate.error.message)
+            return
+        }
+        const {uid, agentId} = validate.value
+        try {
+            await deleteFavourite(uid,agentId);
             res.status(200).send({success: 1})
         }catch(e){
             commonError(e,res);

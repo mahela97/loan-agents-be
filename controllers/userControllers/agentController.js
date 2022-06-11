@@ -349,7 +349,8 @@ module.exports = {
             sortBy: Joi.string().allow("").default(""),
             queryString: Joi.string().allow("").default(""),
             limit: Joi.number().default(-1),
-            page: Joi.number().default(1)
+            page: Joi.number().default(1),
+            favourite: Joi.boolean().default(false)
             }
         );
 

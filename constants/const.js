@@ -142,6 +142,9 @@ module.exports = {
         CONTACT_METHOD:"contactMethod",
         VISIBILITY:"visibility",
         PACKAGE_NAME:"packageName"
+    },
+    FAVOURITE_AGENT_TABLE: {
+        NAME:"favouriteAgent",
     }
 
 };

@@ -1,5 +1,6 @@
 const {
-    getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole, getUsersByQuery
+    getDbUserById, updateUserDetailsById, getUsersByLanguagesDB, getAllUsersByType, getUsersByFieldRole, getUsersByQuery,
+    getFavourites
 } = require("../../repositories/userRepositories/userRepository");
 const {getLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const {
@@ -146,7 +147,7 @@ module.exports = {
 
     getAllAgents: async ({
                              languages, loanTypes, city, country, postalCode, status, sortBy, queryString, limit
-                         }) => {
+                        ,favourite }) => {
 
         const allAgents = await getAllUsersByType(USER_TABLE.values.AGENT);
         const filterList = [allAgents.map(agent => agent.userId)];

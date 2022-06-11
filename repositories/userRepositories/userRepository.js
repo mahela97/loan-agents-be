@@ -2,6 +2,7 @@ const knex = require("../../db/db-config");
 const {
     USER_TABLE,
     USER_CONTACT_METHOD_TABLE, COMMON, AGENT_DETAIL_TABLE, CONTACT_METHOD_TABLE, AGENT_LANGUAGE_TABLE, LANGUAGE_TABLE,
+    FAVOURITE_AGENT_TABLE,
 } = require("../../constants/const");
 
 
@@ -87,4 +88,24 @@ module.exports = {
             .update({archived: true})
             .where(USER_TABLE.USER_ID, uid)
     },
+
+    addFavourite:async (uid,agentId)=>{
+
+        await knex(FAVOURITE_AGENT_TABLE.NAME)
+            .insert({uid,agentId});
+    },
+
+    deleteFavourite:async (uid, agentId)=>{
+
+        await knex(FAVOURITE_AGENT_TABLE.NAME)
+            .delete()
+            .where("uid",uid)
+            .where("agentId",agentId)
+    },
+
+    getFavourites:async (uid)=>{
+        return knex(FAVOURITE_AGENT_TABLE.NAME)
+            .select("agentId")
+            .where("uid",uid)
+    }
 };
