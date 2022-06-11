@@ -67,7 +67,7 @@ module.exports = {
             default:
                 plan = subscriptionType;
         }
-        const subscriptionLimits = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);
+        const subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod);
         return {
             firstName,
             lastName,
