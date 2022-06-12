@@ -21,7 +21,11 @@ module.exports = {
             return
         }
         const {uid} = validate.value
-        const token = req.user.user_id;
+        let token = null;
+
+        if (req.user && req.user.user_id){
+            token = req.user.user_id
+        }
         try {
             const agentDetails = await getAgentDetails(uid,token);
             if (!agentDetails) {
