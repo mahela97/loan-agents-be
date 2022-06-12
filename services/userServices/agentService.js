@@ -70,7 +70,7 @@ module.exports = {
         }
          let subscriptionVisibility;
         if (token && token === uid){
-            subscriptionVisibility = (await getAllPackageVisibility(plan)).map(limit=>limit.contactMethod);
+            subscriptionVisibility = (await getAllPackageVisibility(plan)).map(limit=>limit.contactMethod.toLowerCase());
         }else{
             subscriptionVisibility = (await getPackageVisibility(plan)).map(limit=>limit.contactMethod.toLowerCase());
         }
