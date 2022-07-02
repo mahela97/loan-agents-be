@@ -37,7 +37,11 @@ module.exports = {
         }
         const {phonenumber, code} = validate.value;
         try {
-            await verifyCode(phonenumber, code)
+            const result = await verifyCode(phonenumber, code)
+            if (!result.valid){
+                res.status(200).send({success: 0 })
+                return;
+            }
             res.status(200).send({success: 1})
 
         } catch (error) {

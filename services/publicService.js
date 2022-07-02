@@ -14,7 +14,7 @@ module.exports = {
     },
 
     verifyCode: async (phonenumber, code) => {
-        await client
+        return client
             .verify
             .services(process.env.VERIFY_SERVICE_SID)
             .verificationChecks

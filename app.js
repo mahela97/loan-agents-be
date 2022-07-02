@@ -9,7 +9,6 @@ const initializeFirebaseAuth = require("./constants/firebaseAuth");
 
 initializeFirebase();
 
-
 const app = express();
 
 app.use(bodyParser.json());

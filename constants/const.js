@@ -125,7 +125,7 @@ module.exports = {
         },
         PAY_AS_YOU_GO:{
             PROD_ID: "prod_Lb7iz6q485sq1f",
-            NAME: "PAG",
+            NAME: "PAYG",
             price: "price_1KtvSdGVuEMrgnylfH1ZmT0l"
         },
         FREE:{
