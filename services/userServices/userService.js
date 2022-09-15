@@ -3,23 +3,42 @@ const {
 } = require("../../repositories/userRepositories/userRepository");
 const admin = require("firebase-admin");
 const {
-    CONTACT_METHOD_TABLE, STORAGE,
+    CONTACT_METHOD_TABLE, STORAGE, USER_TABLE,
 } = require("../../constants/const");
 const {getLanguagesByUid, addLanguagesToDBUser, deleteLanguagesByUid} = require("../../repositories/publicRepository/languageRepository");
 const knex = require("../../db/db-config");
 const {getFile} = require("../storageService");
+const { getAuth ,signInWithCustomToken, sendEmailVerification, signOut} = require("firebase/auth");
+const {initializeApp} = require("firebase/app");
+const stripe = require("../../constants/stripeConfig");
+const {createPaymentCustomer, getCurrentPlan} = require("../paymentService");
 
 
 module.exports = {
     testService:async () => {
     },
     registerUser: async (data) => {
+        const firebaseConfig = {
+            apiKey: 'AIzaSyDCRnEuLjAidNPWe9y4xcdIo3C6laAH3Kw',
+            authDomain: 'loan-agents.firebaseapp.com',
+            projectId: 'loan-agents',
+            storageBucket: 'loan-agents.appspot.com',
+            messagingSenderId: '952165638578',
+            appId: '1:952165638578:web:d16e6e819a0288c07184ab'
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const {email, phone, password} = data;
         const user = await admin.auth().createUser({
             email,
             emailVerified: false,
             password
         });
+        const userToken = await admin.auth().createCustomToken(user.uid);
+        const firebaseUser = await signInWithCustomToken(auth,userToken);
+        await sendEmailVerification(firebaseUser.user);
+        await signOut(auth);
         data.userId = user.uid;
         const contactDetails = [
             {
@@ -37,10 +56,19 @@ module.exports = {
             },)
 
         }
+        let customerId;
+        if (data.role === USER_TABLE.values.AGENT){
+
+            customerId = await createPaymentCustomer(data.email, data.firstName, data.lastName);
+        }
+
         delete data.phone;
         delete data.email;
         delete data.password;
-        await createDbUser(data, contactDetails);
+        const transaction = await knex.transaction();
+
+
+        await createDbUser(data, contactDetails, customerId, transaction);
         return user.uid;
     },
 
@@ -50,6 +78,10 @@ module.exports = {
             return null;
         }
         const profilePhoto = await getFile(STORAGE.LOCATIONS.USERS,uid);
+
+        if (result.role === USER_TABLE.values.AGENT){
+             result.subscriptionType = (await getCurrentPlan(uid))
+        }
         if (profilePhoto) {
             result.profilePhoto = profilePhoto
         }

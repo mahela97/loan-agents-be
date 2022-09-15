@@ -1,4 +1,4 @@
-const getErrorObject = require("./commonErrorhandler");
+const {getErrorObject} = require("./commonErrorhandler");
 const handleFirebase =(error)=>{
     switch (error.errorInfo.code){
         case "auth/email-already-exists":

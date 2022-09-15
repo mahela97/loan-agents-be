@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="uuid_generate_v4()" dbms="postgresql"/>
+
+    <changeSet author="mahela" id="25">
+        <createTable tableName="loanType" schemaName="public">
+            <column name="loanName" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="archived" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loanId" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_loanId"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="26">
+        <createTable tableName="agentLoanType" schemaName="public">
+            <column name="userId" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loanId" type="${uuid_type}" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="mahela" id="27">
+        <addForeignKeyConstraint baseColumnNames="loanId"
+                                 baseTableName="agentLoanType"
+                                 constraintName="fk_loanType_agentLoanType"
+                                 referencedColumnNames="loanId"
+                                 referencedTableName="loanType"
+        />
+    </changeSet>
+
+    <changeSet author="mahela" id="28">
+        <addForeignKeyConstraint baseColumnNames="userId"
+                                 baseTableName="agentLoanType"
+                                 constraintName="fk_user_agentLoanType"
+                                 referencedColumnNames="userId"
+                                 referencedTableName="user"
+        />
+    </changeSet>
+</databaseChangeLog>

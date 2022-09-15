@@ -1,9 +1,12 @@
 const {getUserByUid} = require("./userServices/userService");
 const {
     saveMessageToDB, getChatListFromDB, getConversationIdByUid, createConversation, getConversationIdsForUid,
-    getOtherParticipant, getLastMessageByConversationId, getConversationById
+    getOtherParticipant, getLastMessageByConversationId, getConversationById, getConversationsCountByPlanAndUid,
+    updateConversation, updateConversationByUid
 } = require("../repositories/messageRepositories/messageRepository");
 const knex = require("../db/db-config");
+const {getCurrentPlan} = require("./paymentService");
+const {PAYMENT_PLANS} = require("../constants/const");
 module.exports = {
     sendMessage: async ({sender, receiver, message}) => {
         const isSenderExist = await getUserByUid(sender);
@@ -16,11 +19,35 @@ module.exports = {
             throw  new Error("Receiver does not exist in the system")
         }
 
+        // send email when new conversation
+
         const transaction = await knex.transaction();
         let conversationId = await getConversationIdByUid(sender, receiver)
         if (!conversationId) {
-            conversationId = await createConversation(sender, receiver, transaction)
+            const currentSubscription = await getCurrentPlan(receiver);
+
+            let noFreeConversations = 0;
+            let subscriptionType = currentSubscription;
+            let isVisible = true;
+            if (currentSubscription === PAYMENT_PLANS.FREE.NAME || currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
+                noFreeConversations = await getConversationsCountByPlanAndUid(PAYMENT_PLANS.FREE.NAME, receiver);
+
+                if (noFreeConversations >= PAYMENT_PLANS.FREE.COUNT && currentSubscription === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
+                    subscriptionType = PAYMENT_PLANS.PAY_AS_YOU_GO.NAME;
+                    isVisible = false;
+                    //send email to pay to agent
+                } else if (noFreeConversations < PAYMENT_PLANS.FREE.COUNT) {
+                    subscriptionType = PAYMENT_PLANS.FREE.NAME;
+                    isVisible = true;
+                } else {
+                    subscriptionType = null;
+                    isVisible = false
+                }
+            }
+
+            conversationId = await createConversation(sender, receiver, subscriptionType, isVisible, transaction)
         }
+
 
         await saveMessageToDB(conversationId, sender, message, transaction);
         await transaction.commit();
@@ -48,8 +75,8 @@ module.exports = {
             return conversationIds;
         }
 
-        return await Promise.all(
-            conversationIds.map((async ({conversationId}) => {
+        const conversations = (await Promise.all(
+            conversationIds.map((async ({conversationId, isVisible, subscriptionType}) => {
                 const conversation = {};
                 const otherParticipantId = await getOtherParticipant(conversationId, uid);
                 const otherParticipant = await getUserByUid(otherParticipantId)
@@ -65,9 +92,40 @@ module.exports = {
                     conversation.lastMessage = lastMessage;
                 }
                 conversation.conversationId = conversationId;
+                conversation.isVisible = isVisible;
+                conversation.subscriptionType = subscriptionType;
+
                 return conversation
 
             }))
-        );
+        )).filter(conversation => conversation.lastMessage);
+
+        return conversations.sort(function (x, y) {
+            return y.lastMessage.createdAt - x.lastMessage.createdAt
+
+        })
+
+    },
+
+    updateConversations: async (uid) => {
+
+        const currentPlan = await getCurrentPlan(uid);
+
+        if (currentPlan === PAYMENT_PLANS.FREE.NAME) {
+            throw new Error("User haven't subscribed to any plan")
+        }
+
+        const conversationsIds = await getConversationIdsForUid(uid);
+        await Promise.all(
+            conversationsIds.map((async ({conversationId}) => {
+                    if (currentPlan === PAYMENT_PLANS.PAY_AS_YOU_GO.NAME) {
+                        await updateConversationByUid(conversationId, {subscriptionType: currentPlan})
+                    }
+
+                    await updateConversationByUid(conversationId, {isVisible: true})
+                })
+            ))
+
+
     }
 }

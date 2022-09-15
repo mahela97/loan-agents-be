@@ -33,5 +33,5 @@ module.exports = {
         }
         await knex(AGENT_LANGUAGE_TABLE.NAME)
             .delete().where(AGENT_LANGUAGE_TABLE.USER_ID,uid)
-    }
+    },
 }

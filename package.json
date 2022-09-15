@@ -21,6 +21,7 @@
   "dependencies": {
     "@firebase/storage": "^0.9.4",
     "@socket.io/admin-ui": "^0.2.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -29,13 +30,16 @@
     "firebase-admin": "^9.6.0",
     "firebase-functions": "^3.14.1",
     "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^1.0.4",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "multer": "^1.4.4",
     "nodemon": "^2.0.15",
     "pg": "^8.7.3",
     "prettier": "^2.6.1",
     "socket.io": "^4.4.1",
+    "stripe": "^8.219.0",
     "twilio": "^3.76.0"
   }
 }

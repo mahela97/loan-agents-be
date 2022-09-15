@@ -5,8 +5,10 @@ const bodyParser = require("body-parser");
 const initializeFirebase = require("./constants/firebase-config");
 const { instrument } = require("@socket.io/admin-ui");
 const { Server } = require("socket.io");
+const initializeFirebaseAuth = require("./constants/firebaseAuth");
 
 initializeFirebase();
+
 
 const app = express();
 

@@ -7,11 +7,7 @@ const {addFile, deleteFile} = require("../../services/storageService");
 const {STORAGE} = require("../../constants/const");
 const {getAgentDetails} = require("../../services/userServices/agentService");
 module.exports = {
-    test:async (req, res) => {
-        console.log(req.file)
-        console.log("here");
-        await testService();
-    },
+
     registerUser: async (req, res) => {
         const schema = Joi.object({
             firstName: Joi.string().required(),
@@ -19,7 +15,9 @@ module.exports = {
             referredBy: Joi.string().allow(""),
             role: Joi.string().required(),
             password: Joi.string().required().min(6),
-            location: Joi.string().required(),
+            city: Joi.string().required(),
+            country:Joi.string().required(),
+            postalCode: Joi.string().required(),
             longitude: Joi.string().required(),
             latitude: Joi.string().required(),
             email: Joi.string().email().required(),
@@ -31,13 +29,11 @@ module.exports = {
             return;
         }
         const body = validate.value;
-        let uid;
         try {
             const result = await registerUser(body);
-            uid = result;
             res.status(201).send({success: 1, data: {userId: result}});
         } catch (error) {
-            await admin.auth().deleteUser(uid);
+            console.log(error)
             if (error.errorInfo) {
                 const message = handleFirebase(error);
                 res.status(400).send(message);

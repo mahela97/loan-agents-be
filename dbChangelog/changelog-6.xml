@@ -71,15 +71,6 @@
         />
     </changeSet>
 
-<!--    <changeSet author="mahela" id="25">-->
-<!--        <addForeignKeyConstraint baseColumnNames="userId"-->
-<!--                                 baseTableName="message"-->
-<!--                                 constraintName="fk_message_user"-->
-<!--                                 referencedColumnNames="userId"-->
-<!--                                 referencedTableName="user"-->
-<!--        />-->
-<!--    </changeSet>-->
-
 </databaseChangeLog>
 
 

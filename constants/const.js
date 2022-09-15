@@ -4,11 +4,30 @@ module.exports = {
         USER_ID: "userId",
         FIRST_NAME: "firstName",
         LAST_NAME: "lastName",
-        LOCATION: "location",
+        CITY: "city",
+        COUNTRY: "country",
+        POSTAL_CODE: "postalCode",
+        ROLE: "role",
         values: {
             AGENT: "agent"
         }
     },
+    ADMIN_TABLE:{
+        NAME: "admin",
+        EMAIL: "email"
+    }
+    ,
+    LOAN_TYPE_TABLE: {
+        NAME: "loanType",
+        LOAN_ID: "loanId",
+        LOAN_NAME:"loanName"
+    },
+    AGENT_LOAN_TYPE_TABLE: {
+        NAME: "agentLoanType",
+        USER_ID:"userId",
+        LOAN_ID: "loanId"
+    }
+    ,
     COMMON: {
         ARCHIVED: "archived",
         SELECT_ALL: "*",
@@ -20,11 +39,15 @@ module.exports = {
         NAME: "userContactMethod",
         VALUE: "value",
         USER_ID: "userId",
-        VISIBILITY: "visibility"
+        VISIBILITY: "visibility",
+        values:{
+            EMAIL:"EMAIL"
+        }
     },
     AGENT_DETAIL_TABLE: {
         NAME: "agentDetail",
-        USER_ID: "userId"
+        USER_ID: "userId",
+        CUSTOMER_ID: "customerId"
     },
     LANGUAGE_TABLE: {
         NAME: "language",
@@ -75,13 +98,39 @@ module.exports = {
     CONVERSATION_TABLE: {
         NAME: "conversation",
         PARTICIPANT_ID :"participantId",
-        CONVERSATION_ID: "conversationId"
+        CONVERSATION_ID: "conversationId",
+        SUBSCRIPTION_TYPE: "subscriptionType",
+        IS_VISIBLE: "isVisible"
     },
     STORAGE: {
         BUCKET_NAME: "gs://loan-agents.appspot.com",
         LOCATIONS:{
-            USERS: "loan-agents/images/users/"
+            USERS: "loan-agents/images/users/",
+            LOAN_ICONS: "loan-agents/images/loanTypes/"
         }
-    }
+    },
+    PAYMENT_PLANS: {
+        MONTHLY:{
+            PROD_ID: "prod_Lb7iang2GW1IXP",
+            NAME: "MONTHLY",
+            price: "price_1KtvT2GVuEMrgnylITuTWywH",
+
+        },
+        YEARLY:{
+            PROD_ID: "prod_Lb7ifIls2JPw4n",
+            NAME: "YEARLY",
+            price: "price_1Kwo9bGVuEMrgnylV0CCTxgA"
+        },
+        PAY_AS_YOU_GO:{
+            PROD_ID: "prod_Lb7iz6q485sq1f",
+            NAME: "PAG",
+            price: "price_1KtvSdGVuEMrgnylfH1ZmT0l"
+        },
+        FREE:{
+            NAME:"FREE",
+            COUNT: 2
+        },
+        price: "price"
+    },
 
 };

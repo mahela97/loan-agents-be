@@ -14,7 +14,7 @@
             <column name="statement" type="VARCHAR(255)" >
                 <constraints nullable="true" />
             </column>
-            <column name="viaPhone" type="BOOLEAN" defaultValueBoolean="false" >
+            <column name="viaVideo" type="BOOLEAN" defaultValueBoolean="false" >
                 <constraints nullable="false" />
             </column>
             <column name="viaMobile" type="BOOLEAN" defaultValueBoolean="false">
@@ -26,9 +26,9 @@
             <column name="profileCompleted" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false" />
             </column>
-<!--            <column name="subscriptionId" type="VARCHAR(255)" >-->
-<!--                <constraints nullable="true" default="false"/>-->
-<!--            </column>-->
+            <column name="customerId" type="VARCHAR(255)" >
+                <constraints nullable="true" default="false"/>
+            </column>
         </createTable>
     </changeSet>
 
